@@ -1,3 +1,4 @@
+import sys
 
 import customtkinter as ctk
 
@@ -40,7 +41,7 @@ class App(ctk.CTk):
         self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Simulate",border_width=2, fg_color=self.background_Colour)
         self.sidebar_button_4.grid(row=4, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
 
-        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Exit",border_width=2, fg_color=self.background_Colour)
+        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Exit",border_width=2, fg_color=self.background_Colour, command=sys.exit)
         self.sidebar_button_4.grid(row=5, column=0, padx=20, pady=20, columnspan=2, sticky = "s" )
 
         # create Main frame
