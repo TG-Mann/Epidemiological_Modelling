@@ -15,8 +15,9 @@ class App(ctk.CTk):
         self.geometry("1500x800")
         self.background_Colour = "#474645"
         self.Secondary_Colour = "#193b89"
+        self.font = "Small Fonts"  # Courier MS Serif  Small Fonts
 
-        #removes titlebar
+        # removes titlebar
         self.overrideredirect(True)
 
         # configure grid layout (4x4)
@@ -28,32 +29,33 @@ class App(ctk.CTk):
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, columnspan = 1,sticky="nsew", padx=10, pady=10)
         self.sidebar_frame.grid_rowconfigure(5, weight=1)
 
-        self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Modelling", font=ctk.CTkFont(size=30, weight="bold") )
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Modelling", font=ctk.CTkFont(self.font, size=30, weight="bold")  )
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan = 1, sticky="nsew")
 
-        self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Models", border_width=2, fg_color=self.background_Colour, command= odeInt)
+        self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Models", font= (self.font, 20),
+                                              border_width=5, height = 60, fg_color=self.background_Colour, command= odeInt)
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=20,  columnspan = 2, sticky="nsew")
 
-        self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Details", border_width=2, fg_color=self.background_Colour)
+        self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Details", font= (self.font, 20),
+                                              border_width=5, height = 60, fg_color=self.background_Colour)
         self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
 
-        self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Parameters", border_width=2, fg_color=self.background_Colour)
+        self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Parameters", font= (self.font, 20),
+                                              border_width=5,height = 60, fg_color=self.background_Colour)
         self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
 
-        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Simulate",border_width=2, fg_color=self.background_Colour)
+        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Simulate", font= (self.font, 20),
+                                              border_width=5, height = 60, fg_color=self.background_Colour)
         self.sidebar_button_4.grid(row=4, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
 
-        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Exit",border_width=2, fg_color=self.background_Colour, command=sys.exit)
-        self.sidebar_button_4.grid(row=5, column=0, padx=20, pady=20, columnspan=2, sticky = "s" )
+        self.sidebar_button_5 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Exit", font= (self.font, 20),
+                                              border_width=5, height = 60, fg_color=self.background_Colour, command=sys.exit)
+        self.sidebar_button_5.grid(row=5, column=0, padx=20, pady=20, columnspan=2, sticky = "s" )
 
         # create Main frame
         self.sidebar_frame2 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_Colour)
         self.sidebar_frame2.grid(row=0, column=1, rowspan=4, columnspan=10, sticky="nsew", padx=20, pady=20)
         self.sidebar_frame2.grid_rowconfigure(4, weight=1)
-
-
-
-
 
 if __name__ == "__main__":
     app = App()
