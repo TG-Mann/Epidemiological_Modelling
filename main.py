@@ -2,6 +2,8 @@ import sys
 
 import customtkinter as ctk
 
+from Solvers import odeInt
+
 ctk.set_appearance_mode("dark")
 
 class App(ctk.CTk):
@@ -26,10 +28,10 @@ class App(ctk.CTk):
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, columnspan = 1,sticky="nsew", padx=10, pady=10)
         self.sidebar_frame.grid_rowconfigure(5, weight=1)
 
-        self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Modelling", font=ctk.CTkFont(size=30, weight="bold"))
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Modelling", font=ctk.CTkFont(size=30, weight="bold") )
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan = 1, sticky="nsew")
 
-        self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Models", border_width=2, fg_color=self.background_Colour)
+        self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Models", border_width=2, fg_color=self.background_Colour, command= odeInt)
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=20,  columnspan = 2, sticky="nsew")
 
         self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Details", border_width=2, fg_color=self.background_Colour)
