@@ -62,13 +62,19 @@ class App(ctk.CTk):
 
     def setupChart(self):
 
-        fig_1 = Figure(figsize=(2.5, 2.2), facecolor= 'xkcd:grey')
+        fig_1 = Figure(figsize=(5, 5), facecolor= self.background_Colour, alpha = 0.9)
         ax_1 = fig_1.add_subplot()
-        ax_1.fill_between(x=[1,2,3,4,5,6,7], y1=[1,2,3,4,5,6,7])
-
+        ax_1.set_facecolor(self.background_Colour)
+        ax_1.set_alpha(0.9)
+        #ax_1.fill_between(x=[1,2,3,4,5,6,7], y1=[1,2,3,4,5,6,7])
+        S,I,R,ts = odeInt()
+        ax_1.plot(ts, S)
+        ax_1.plot(ts, I)
+        ax_1.plot(ts, R)
+        ax_1.grid(visible = True)
         canvas = FigureCanvasTkAgg(figure=fig_1, master=self.sidebar_frame2)
         canvas.draw()
-        canvas.get_tk_widget().place(x=40, y=220)
+        canvas.get_tk_widget().place(x=10, y=10)
 
 if __name__ == "__main__":
     app = App()

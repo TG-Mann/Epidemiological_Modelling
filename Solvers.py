@@ -118,23 +118,26 @@ def SIR(Values, t):
 def odeInt():
     ts = np.arange(0, 60, 0.01)
 
+    # this is the bit to tweak for more equations
     Us = odeint(SIR, [s, i, r], ts)
 
     S, I, R = Us[:, 0], Us[:, 1], Us[:, 2]
 
+    return S,I,R,ts
+
     # fig = plt.subplot()
-    fig = plt.figure()
-    fig.patch.set_facecolor('xkcd:grey')
-    plt.plot(ts, S, label="")
-    plt.plot(ts, I, label="")
-    plt.plot(ts, R, label="")
+   # fig = plt.figure()
+   # fig.patch.set_facecolor('xkcd:grey')
+   # plt.plot(ts, S, label="")
+   # plt.plot(ts, I, label="")
+   # plt.plot(ts, R, label="")
 
-    ax = plt.gca()
-    ax.set_facecolor('xkcd:grey')
-    plt.legend(facecolor="xkcd:grey", edgecolor="xkcd:grey")
+   # ax = plt.gca()
+   # ax.set_facecolor('xkcd:grey')
+   # plt.legend(facecolor="xkcd:grey", edgecolor="xkcd:grey")
 
-    canvas = FigureCanvasTkAgg(plt)
-    canvas.show()
+   # canvas = FigureCanvasTkAgg(plt)
+   # canvas.show()
     #plt.show()
 
 
