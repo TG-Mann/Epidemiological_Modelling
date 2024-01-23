@@ -6,34 +6,24 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 s = 1500.0
 i = 1.0
 r = 0.0
-
 beta = 0.0005
 gamma = 0.1
-
 time = 60.0
 deltat = 0.0001
-
 sValues = [s]
 iValues = [i]
 rValues = [r]
 tValues = [0.0]
 
-
 def eulerMethod(x):
     methodHasRan = False
-
     while tValues[-1] < time:
-
         if x == 'sir':
 
             sValues.append(sValues[-1] - deltat * beta * sValues[-1] * iValues[-1])
-
             iValues.append(iValues[-1] + deltat * beta * sValues[-2] * iValues[-1] - deltat * gamma * iValues[-1])
-
             rValues.append(rValues[-1] + deltat * gamma * iValues[-2])
-
             tValues.append(tValues[-1] + deltat)
-
             methodHasRan = True
 
         else:
@@ -42,33 +32,11 @@ def eulerMethod(x):
 
     createGraph(methodHasRan)
 
-
 def rungeKuttaMethod(x):
     methodHasRan = False
-
     while tValues[-1] < 60:
 
         if x == 'sir':
-
-            """ k0 = deltat * -beta*sValues[-1] * iValues[-1]
-            k1 = deltat * (-beta * (sValues[-1] + 0.5 * k0) * (iValues[-1] + 0.5 * k0))
-            k2 = deltat * (-beta * (sValues[-1] + 0.5 * k1) * (iValues[-1] + 0.5 * k1))
-            k3 = deltat * (-beta * (sValues[-1] * k2) * (iValues[-1] * k2))
-
-            h0 = deltat * (beta * sValues[-1] * iValues[-1] - (gamma * iValues[-1]))
-            h1 = deltat * ((beta * (sValues[-1] + 0.5 * h0) * (iValues[-1] + 0.5 * h0)) - (gamma * iValues[-1] + 0.5 * h0))
-            h2 = deltat * ((beta * (sValues[-1] + 0.5 * h1) * (iValues[-1] + 0.5 * h1)) - (gamma * iValues[-1] + 0.5 * h1))
-            h3 = deltat * ((beta * (sValues[-1] * h2) * (iValues[-1] * h2)) - (gamma * iValues[-1] * h2))
-
-            sValues.append(sValues[-1] + ((k0 + 2*k1 + 2*k2 + k3) / 6))
-            iValues.append(iValues[-1] + ((h0 + 2 * h1 + 2 * h2 + h3) / 6))
-
-
-
-            rValues.append(1500 - sValues[-1] + ((k0 + 2*k1 + 2*k2 + k3) / 6) - iValues[-1] + ((h0 + 2 * h1 + 2 * h2 + h3) / 6))
-            tValues.append(tValues[-1] + deltat)
-
-            methodHasRan = True """
 
             s0 = deltat * -beta * sValues[-1] * iValues[-1]
             i0 = deltat * (beta * sValues[-1] * iValues[-1] - (gamma * iValues[-1]))
@@ -91,13 +59,11 @@ def rungeKuttaMethod(x):
             tValues.append(tValues[-1] + deltat)
 
             methodHasRan = True
-
         else:
             tValues.append(60)
             print("No Such equation Exists")
 
     createGraph(methodHasRan)
-
 
 def createGraph(methodHasRan):
     if (methodHasRan):
@@ -125,20 +91,7 @@ def odeInt():
 
     return S,I,R,ts
 
-    # fig = plt.subplot()
-   # fig = plt.figure()
-   # fig.patch.set_facecolor('xkcd:grey')
-   # plt.plot(ts, S, label="")
-   # plt.plot(ts, I, label="")
-   # plt.plot(ts, R, label="")
 
-   # ax = plt.gca()
-   # ax.set_facecolor('xkcd:grey')
-   # plt.legend(facecolor="xkcd:grey", edgecolor="xkcd:grey")
-
-   # canvas = FigureCanvasTkAgg(plt)
-   # canvas.show()
-    #plt.show()
 
 
 

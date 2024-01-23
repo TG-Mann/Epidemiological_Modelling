@@ -14,9 +14,16 @@ class App(ctk.CTk):
         # configure window
         self.title("Epidemiological Modelling")
         self.geometry("1500x800")
-        self.background_Colour = "#474645"
-        self.Secondary_Colour = "#193b89"
-        self.font = "Small Fonts"  # Courier MS Serif  Small Fonts
+
+        # ui parameters
+        self.background_colour = "#474645"
+        self.secondary_colour = "#193b89"
+        self.font = "Small Fonts"
+        self.button_height = 65
+        self.button_font_size = 20
+        self.button_border_width = 5
+        self.button_padx = 20
+        self.button_pady = 20
 
         # removes titlebar
         self.overrideredirect(True)
@@ -26,7 +33,7 @@ class App(ctk.CTk):
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
         # create sidebar frame
-        self.sidebar_frame = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_Colour)
+        self.sidebar_frame = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, columnspan = 1,sticky="nsew", padx=10, pady=10)
         self.sidebar_frame.grid_rowconfigure(5, weight=1)
 
@@ -34,45 +41,44 @@ class App(ctk.CTk):
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan = 1, sticky="nsew")
 
         # create Main frame
-        self.sidebar_frame2 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_Colour)
+        self.sidebar_frame2 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame2.grid(row=0, column=1, rowspan=4, columnspan=10, sticky="nsew", padx=20, pady=20)
         self.sidebar_frame2.grid_rowconfigure(4, weight=1)
 
-        self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Models", font= (self.font, 20),
-                                              border_width=5, height = 60, fg_color=self.background_Colour)
-        self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=20,  columnspan = 2, sticky="nsew")
+        self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text = "Models", font= (self.font, self.button_font_size),
+                                              border_width=self.button_border_width, height = self.button_height, fg_color=self.background_colour)
+        self.sidebar_button_1.grid(row=1, column=0, padx=self.button_padx, pady=self.button_pady,  columnspan = 2, sticky="nsew")
 
-        self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Details", font= (self.font, 20),
-                                              border_width=5, height = 60, fg_color=self.background_Colour)
-        self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
+        self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text = "Details", font= (self.font, self.button_font_size),
+                                              border_width=self.button_border_width, height = self.button_height, fg_color=self.background_colour)
+        self.sidebar_button_2.grid(row=2, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky="nsew")
 
-        self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Parameters", font= (self.font, 20),
-                                              border_width=5,height = 60, fg_color=self.background_Colour)
-        self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
+        self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text = "Parameters", font= (self.font, self.button_font_size),
+                                              border_width=self.button_border_width,height = self.button_height, fg_color=self.background_colour)
+        self.sidebar_button_3.grid(row=3, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky="nsew")
 
-        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Simulate", font= (self.font, 20),
-                                              border_width=5, height = 60, fg_color=self.background_Colour, command=self.setupChart)
-        self.sidebar_button_4.grid(row=4, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
+        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text = "Simulate", font= (self.font, self.button_font_size),
+                                              border_width=self.button_border_width, height = self.button_height, fg_color=self.background_colour, command=self.setupChart)
+        self.sidebar_button_4.grid(row=4, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky="nsew")
 
-        self.sidebar_button_5 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Exit", font= (self.font, 20),
-                                              border_width=5, height = 60, fg_color=self.background_Colour, command=sys.exit)
-        self.sidebar_button_5.grid(row=5, column=0, padx=20, pady=20, columnspan=2, sticky = "s" )
-
-        #self.setupChart()
+        self.sidebar_button_5 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text = "Exit", font= (self.font, self.button_font_size),
+                                              border_width=self.button_border_width, height = self.button_height, fg_color=self.background_colour, command=sys.exit)
+        self.sidebar_button_5.grid(row=5, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky = "s" )
 
     def setupChart(self):
 
-        fig_1 = Figure(figsize=(5, 5), facecolor= self.background_Colour, alpha = 0.9)
-        ax_1 = fig_1.add_subplot()
-        ax_1.set_facecolor(self.background_Colour)
-        ax_1.set_alpha(0.9)
-        #ax_1.fill_between(x=[1,2,3,4,5,6,7], y1=[1,2,3,4,5,6,7])
-        S,I,R,ts = odeInt()
-        ax_1.plot(ts, S)
-        ax_1.plot(ts, I)
-        ax_1.plot(ts, R)
-        ax_1.grid(visible = True)
-        canvas = FigureCanvasTkAgg(figure=fig_1, master=self.sidebar_frame2)
+        fig = Figure(figsize=(6, 7), facecolor= self.background_colour, alpha = 0.9)
+        ax = fig.add_subplot()
+        ax.set_facecolor(self.background_colour)
+        ax.set_alpha(0.9)
+
+        s,i,r,ts = odeInt()
+        ax.plot(ts, s)
+        ax.plot(ts, i)
+        ax.plot(ts, r)
+
+        ax.grid(visible = True)
+        canvas = FigureCanvasTkAgg(figure=fig, master=self.sidebar_frame2)
         canvas.draw()
         canvas.get_tk_widget().place(x=10, y=10)
 
