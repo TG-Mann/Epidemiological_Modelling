@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.integrate import odeint
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 s = 1500.0
 i = 1.0
@@ -131,7 +132,11 @@ def odeInt():
     ax = plt.gca()
     ax.set_facecolor('xkcd:grey')
     plt.legend(facecolor="xkcd:grey", edgecolor="xkcd:grey")
-    plt.show()
+
+    canvas = FigureCanvasTkAgg(plt)
+    canvas.show()
+    #plt.show()
+
 
 
 

@@ -1,8 +1,9 @@
 import sys
 
 import customtkinter as ctk
-
+from matplotlib.figure import Figure
 from Solvers import odeInt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 ctk.set_appearance_mode("dark")
 
@@ -32,8 +33,13 @@ class App(ctk.CTk):
         self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Modelling", font=ctk.CTkFont(self.font, size=30, weight="bold")  )
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan = 1, sticky="nsew")
 
+        # create Main frame
+        self.sidebar_frame2 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_Colour)
+        self.sidebar_frame2.grid(row=0, column=1, rowspan=4, columnspan=10, sticky="nsew", padx=20, pady=20)
+        self.sidebar_frame2.grid_rowconfigure(4, weight=1)
+
         self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Models", font= (self.font, 20),
-                                              border_width=5, height = 60, fg_color=self.background_Colour, command= odeInt)
+                                              border_width=5, height = 60, fg_color=self.background_Colour)
         self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=20,  columnspan = 2, sticky="nsew")
 
         self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Details", font= (self.font, 20),
@@ -45,17 +51,24 @@ class App(ctk.CTk):
         self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
 
         self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Simulate", font= (self.font, 20),
-                                              border_width=5, height = 60, fg_color=self.background_Colour)
+                                              border_width=5, height = 60, fg_color=self.background_Colour, command=self.setupChart)
         self.sidebar_button_4.grid(row=4, column=0, padx=20, pady=20, columnspan=2, sticky="nsew")
 
         self.sidebar_button_5 = ctk.CTkButton(self.sidebar_frame, border_color=self.Secondary_Colour, text = "Exit", font= (self.font, 20),
                                               border_width=5, height = 60, fg_color=self.background_Colour, command=sys.exit)
         self.sidebar_button_5.grid(row=5, column=0, padx=20, pady=20, columnspan=2, sticky = "s" )
 
-        # create Main frame
-        self.sidebar_frame2 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_Colour)
-        self.sidebar_frame2.grid(row=0, column=1, rowspan=4, columnspan=10, sticky="nsew", padx=20, pady=20)
-        self.sidebar_frame2.grid_rowconfigure(4, weight=1)
+        #self.setupChart()
+
+    def setupChart(self):
+
+        fig_1 = Figure(figsize=(2.5, 2.2), facecolor= 'xkcd:grey')
+        ax_1 = fig_1.add_subplot()
+        ax_1.fill_between(x=[1,2,3,4,5,6,7], y1=[1,2,3,4,5,6,7])
+
+        canvas = FigureCanvasTkAgg(figure=fig_1, master=self.sidebar_frame2)
+        canvas.draw()
+        canvas.get_tk_widget().place(x=40, y=220)
 
 if __name__ == "__main__":
     app = App()
