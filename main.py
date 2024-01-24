@@ -73,7 +73,6 @@ class App(ctk.CTk):
                                               border_width=self.button_border_width, height = self.button_height, fg_color=self.background_colour, command=sys.exit)
         self.sidebar_button_6.grid(row=6, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky = "s" )
 
-        self.model_menu()
     def setup_chart(self):
 
         print(self.model_slider.get())
@@ -100,15 +99,43 @@ class App(ctk.CTk):
         self.menu_present = True
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
-        self.sidebar_frame3.grid_rowconfigure((1,2,3,4,5), weight=1)
+        self.sidebar_frame3.grid_rowconfigure((1,2,3,4,5,6,7,8), weight=1)
 
-        self.test = ctk.CTkButton(self.sidebar_frame3)
-        self.test.grid(row = 1, column = 0)
-
-        self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Models",
-                                       font=ctk.CTkFont(self.font, size=30, weight="bold"))
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Models", font=ctk.CTkFont(self.font, size=30, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
 
+        # code for number of charts ui
+        self.choice_frame = ctk.CTkFrame(master=self.sidebar_frame3)
+        self.choice_frame.grid(row=1, column=0, padx=10, pady=10)
+        self.logo_label = ctk.CTkLabel(self.choice_frame, text="Number of Graphs", font=ctk.CTkFont(self.font, size=20, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=5, pady=5, columnspan=1, sticky="nsew")
+        self.segemented_button = ctk.CTkSegmentedButton(self.choice_frame, values=["One", "Two", "Three", "Four"], height=50, width = 100)
+        self.segemented_button.grid(row=1, column=0, padx=5, pady=5, columnspan=1)
+
+        self.button_padding = 10
+
+        #code for selecting a model
+        self.choice_frame = ctk.CTkFrame(master=self.sidebar_frame3)
+        self.choice_frame.grid(row=2, column=0, padx=5, pady=5)
+        self.logo_label = ctk.CTkLabel(self.choice_frame, text="Types of Model", font=ctk.CTkFont(self.font, size=20, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=15, pady=15, columnspan=1, sticky="nsew")
+        self.checkbox_sir = ctk.CTkCheckBox(master=self.choice_frame, text=" SIR", onvalue="on", offvalue="off")
+        self.checkbox_sir.grid(row=1, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+        self.checkbox_seir = ctk.CTkCheckBox(master=self.choice_frame, text=" SEIR", onvalue="on", offvalue="off")
+        self.checkbox_seir.grid(row=2, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+        self.checkbox_sit = ctk.CTkCheckBox(master=self.choice_frame, text=" SIT", onvalue="on", offvalue="off")
+        self.checkbox_sit.grid(row=3, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+        self.checkbox_seqijr = ctk.CTkCheckBox(master=self.choice_frame, text=" SEQIJR", onvalue="on", offvalue="off")
+        self.checkbox_seqijr.grid(row=4, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+        self.checkbox_sis = ctk.CTkCheckBox(master=self.choice_frame, text=" SIS", onvalue="on", offvalue="off")
+        self.checkbox_sis.grid(row=5, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+        self.checkbox_sird = ctk.CTkCheckBox(master=self.choice_frame, text=" SIRD", onvalue="on", offvalue="off")
+        self.checkbox_sird.grid(row=6, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+        self.checkbox_MSIR = ctk.CTkCheckBox(master=self.choice_frame, text=" MSIR", onvalue="on", offvalue="off")
+        self.checkbox_MSIR.grid(row=7, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+
+        self.sidebar_button_6 = ctk.CTkButton(self.sidebar_frame3, border_color=self.secondary_colour, text="Confirm",font=(self.font, self.button_font_size),border_width=self.button_border_width, height=self.button_height,fg_color=self.background_colour)
+        self.sidebar_button_6.grid(row=3, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=1, sticky="s")
 
 
 
