@@ -25,6 +25,7 @@ class App(ctk.CTk):
         self.button_border_width = 5
         self.button_padx = 20
         self.button_pady = 20
+        self.menu_present = False
 
         # removes titlebar
         self.overrideredirect(True)
@@ -91,6 +92,10 @@ class App(ctk.CTk):
 
     def model_menu(self):
 
+        if (self.menu_present):
+            self.sidebar_frame3.grid_remove()
+
+        self.menu_present = True
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
         self.sidebar_frame3.grid_rowconfigure(5, weight=1)
@@ -101,6 +106,10 @@ class App(ctk.CTk):
 
     def detail_menu(self):
 
+        if (self.menu_present):
+            self.sidebar_frame3.grid_remove()
+
+        self.menu_present = True
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
         self.sidebar_frame3.grid_rowconfigure(5, weight=1)
@@ -111,6 +120,10 @@ class App(ctk.CTk):
 
     def parameters_menu(self):
 
+        if (self.menu_present):
+            self.sidebar_frame3.grid_remove()
+
+        self.menu_present = True
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
         self.sidebar_frame3.grid_rowconfigure(5, weight=1)
@@ -121,7 +134,8 @@ class App(ctk.CTk):
 
     def remove_model_menu(self):
 
-        self.sidebar_frame3.grid_remove()
+        if (self.menu_present):
+            self.sidebar_frame3.grid_remove()
 
 if __name__ == "__main__":
     app = App()
