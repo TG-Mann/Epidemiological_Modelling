@@ -52,11 +52,11 @@ class App(ctk.CTk):
         self.sidebar_button_1.grid(row=1, column=0, padx=self.button_padx, pady=self.button_pady,  columnspan = 2, sticky="nsew")
 
         self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text = "Details", font= (self.font, self.button_font_size),
-                                              border_width=self.button_border_width, height = self.button_height, fg_color=self.background_colour)
+                                              border_width=self.button_border_width, height = self.button_height, fg_color=self.background_colour, command = self.detail_menu)
         self.sidebar_button_2.grid(row=2, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky="nsew")
 
         self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text = "Parameters", font= (self.font, self.button_font_size),
-                                              border_width=self.button_border_width,height = self.button_height, fg_color=self.background_colour)
+                                              border_width=self.button_border_width,height = self.button_height, fg_color=self.background_colour, command = self.parameters_menu)
         self.sidebar_button_3.grid(row=3, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky="nsew")
 
         self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text = "Simulate", font= (self.font, self.button_font_size),
@@ -92,8 +92,32 @@ class App(ctk.CTk):
     def model_menu(self):
 
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
-        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=10)
+        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
         self.sidebar_frame3.grid_rowconfigure(5, weight=1)
+
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Models",
+                                       font=ctk.CTkFont(self.font, size=30, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
+
+    def detail_menu(self):
+
+        self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
+        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
+        self.sidebar_frame3.grid_rowconfigure(5, weight=1)
+
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Details",
+                                       font=ctk.CTkFont(self.font, size=30, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
+
+    def parameters_menu(self):
+
+        self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
+        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
+        self.sidebar_frame3.grid_rowconfigure(5, weight=1)
+
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Parameters",
+                                       font=ctk.CTkFont(self.font, size=30, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
 
     def remove_model_menu(self):
 
