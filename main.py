@@ -73,7 +73,10 @@ class App(ctk.CTk):
                                               border_width=self.button_border_width, height = self.button_height, fg_color=self.background_colour, command=sys.exit)
         self.sidebar_button_6.grid(row=6, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky = "s" )
 
+        self.model_menu()
     def setup_chart(self):
+
+        print(self.model_slider.get())
 
         fig = Figure(figsize=(6, 7), facecolor= self.background_colour, alpha = 0.9)
         ax = fig.add_subplot()
@@ -92,22 +95,26 @@ class App(ctk.CTk):
 
     def model_menu(self):
 
-        if (self.menu_present):
-            self.sidebar_frame3.grid_remove()
+        self.remove_model_menu()
 
         self.menu_present = True
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
-        self.sidebar_frame3.grid_rowconfigure(5, weight=1)
+        self.sidebar_frame3.grid_rowconfigure((1,2,3,4,5), weight=1)
+
+        self.test = ctk.CTkButton(self.sidebar_frame3)
+        self.test.grid(row = 1, column = 0)
 
         self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Models",
                                        font=ctk.CTkFont(self.font, size=30, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
 
+
+
+
     def detail_menu(self):
 
-        if (self.menu_present):
-            self.sidebar_frame3.grid_remove()
+        self.remove_model_menu()
 
         self.menu_present = True
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
@@ -120,8 +127,7 @@ class App(ctk.CTk):
 
     def parameters_menu(self):
 
-        if (self.menu_present):
-            self.sidebar_frame3.grid_remove()
+        self.remove_model_menu()
 
         self.menu_present = True
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
