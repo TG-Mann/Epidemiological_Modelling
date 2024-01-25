@@ -19,7 +19,7 @@ class App(ctk.CTk):
         # ui parameters
         self.background_colour = "#474645"
         self.secondary_colour = "#193b89"
-        self.font = "Small Fonts"
+        self.font = "MS Serif"
         self.button_height = 55
         self.button_font_size = 20
         self.button_border_width = 5
@@ -139,7 +139,7 @@ class App(ctk.CTk):
             #code for selecting a model
             self.types_of_chart.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
             self.types_of_chart[i].grid(row=i+1, column=0, padx=5, pady=5, sticky="ew")
-            self.logo_label = ctk.CTkLabel(self.types_of_chart[i], text="Model" + str(i+1), font=ctk.CTkFont(self.font, size=20, weight="bold"))
+            self.logo_label = ctk.CTkLabel(self.types_of_chart[i], text="Model " + str(i+1), font=ctk.CTkFont(self.font, size=20, weight="bold"))
             self.logo_label.grid(row=0, column=0, padx=15, pady=15, columnspan=2, sticky="nsew")
 
             self.checkbox_values.append(ctk.StringVar(value = "SIR"))
