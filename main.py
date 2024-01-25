@@ -329,17 +329,43 @@ class App(ctk.CTk):
     def parameters_menu(self):
 
         self.remove_model_menu()
-
-        print(self.checkbox_treatment_value[0].get())
-
         self.menu_present = True
+
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
-        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
-        self.sidebar_frame3.grid_rowconfigure(5, weight=1)
+        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
+        self.sidebar_frame3.grid_rowconfigure((1, 2, 3, 4, 5, 6, 7, 8), weight=1)
 
         self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Parameters",
                                        font=ctk.CTkFont(self.font, size=30, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
+
+        self.button_padding = 10
+
+        self.types_of_detail = []
+
+        # creates a number of selection option per chart
+        i = 0
+        while i < self.number_of_charts():
+
+            # code for selecting a model
+            if self.number_of_charts() == 4 or self.number_of_charts() == 3:
+                self.types_of_detail.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
+                self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
+            else:
+                self.types_of_detail.append(ctk.CTkFrame(master=self.sidebar_frame3))
+                self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
+
+            if len(self.checkbox_values) != 0:
+                self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Model " + str(i + 1) + " (" + str(
+                    self.checkbox_values[i].get()) + ")",
+                    font=ctk.CTkFont(self.font, size=20, weight="bold"))
+                self.logo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+            else:
+                self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Model " + str(i + 1),
+                                               font=ctk.CTkFont(self.font, size=20, weight="bold"))
+                self.logo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+
+            i += 1
 
     def remove_model_menu(self):
 
