@@ -38,9 +38,9 @@ class App(ctk.CTk):
         # Detail Menu Parameters
         self.types_of_detail = []
         self.checkbox_birthrates_value = []
-        self.checkbox_quarantine_value = []
         self.checkbox_maternal_immunity_value = []
         self.checkbox_deaths_value = []
+        self.checkbox_treatment_value = []
         self.checkbox_seasonal_forcing_value = []
 
         # removes titlebar
@@ -231,7 +231,7 @@ class App(ctk.CTk):
 
         self.types_of_detail = []
         self.checkbox_birthrates_value = []
-        self.checkbox_quarantine_value = []
+        self.checkbox_treatment_value = []
         self.checkbox_maternal_immunity_value = []
         self.checkbox_deaths_value = []
         self.checkbox_seasonal_forcing_value = []
@@ -266,16 +266,27 @@ class App(ctk.CTk):
             self.checkbox_birthrates.grid(row=1, column=0, padx=self.button_padding, pady=self.button_padding,
                                               columnspan=1, sticky="nsew")
 
-            self.checkbox_quarantine_value.append(ctk.StringVar(value="No"))
-            self.checkbox_quarantine = ctk.CTkCheckBox(master=self.types_of_detail[i],
-                                                                     text="Seasonal Forcing (Beta)",
-                                                                     onvalue="Quarantine", offvalue="No",
-                                                                     variable=self.checkbox_quarantine_value[i],
+            self.checkbox_treatment_value.append(ctk.StringVar(value="No"))
+            self.checkbox_quarantine = ctk.CTkRadioButton(master=self.types_of_detail[i],
+                                                                     text="Quarantine",
+                                                                     value="Quarantine",
+                                                                     variable=self.checkbox_treatment_value[i],
                                                                      width=25, fg_color=self.secondary_colour,
                                                                      font=ctk.CTkFont(self.font, size=12,
                                                                                       weight="bold"))
             self.checkbox_quarantine.grid(row=2, column=0, padx=self.button_padding,
                                                      pady=self.button_padding, columnspan=1, sticky="nsew")
+
+            self.checkbox_treatment_value.append(ctk.StringVar(value="No"))
+            self.checkbox_treatment_model = ctk.CTkRadioButton(master=self.types_of_detail[i],
+                                                            text="Treatment Model",
+                                                            value="Treatment Model",
+                                                            variable=self.checkbox_treatment_value[i],
+                                                            width=25, fg_color=self.secondary_colour,
+                                                            font=ctk.CTkFont(self.font, size=12,
+                                                                             weight="bold"))
+            self.checkbox_treatment_model.grid(row=3, column=0, padx=self.button_padding,
+                                               pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_maternal_immunity_value.append(ctk.StringVar(value="No"))
             self.checkbox_maternal_immunity = ctk.CTkCheckBox(master=self.types_of_detail[i],
@@ -285,7 +296,7 @@ class App(ctk.CTk):
                                                        width=25, fg_color=self.secondary_colour,
                                                        font=ctk.CTkFont(self.font, size=12,
                                                                         weight="bold"))
-            self.checkbox_maternal_immunity.grid(row=3, column=0, padx=self.button_padding,
+            self.checkbox_maternal_immunity.grid(row=4, column=0, padx=self.button_padding,
                                           pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_deaths_value.append(ctk.StringVar(value="No"))
@@ -296,7 +307,7 @@ class App(ctk.CTk):
                                                               width=25, fg_color=self.secondary_colour,
                                                               font=ctk.CTkFont(self.font, size=12,
                                                                                weight="bold"))
-            self.checkbox_deaths.grid(row=4, column=0, padx=self.button_padding,
+            self.checkbox_deaths.grid(row=5, column=0, padx=self.button_padding,
                                                  pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_seasonal_forcing_value.append(ctk.StringVar(value="No"))
@@ -307,8 +318,11 @@ class App(ctk.CTk):
                                                    width=25, fg_color=self.secondary_colour,
                                                    font=ctk.CTkFont(self.font, size=12,
                                                                     weight="bold"))
-            self.checkbox_seasonal_forcing.grid(row=5, column=0, padx=self.button_padding,
+            self.checkbox_seasonal_forcing.grid(row=6, column=0, padx=self.button_padding,
                                       pady=self.button_padding, columnspan=1, sticky="nsew")
+
+
+
 
             i += 1
 
@@ -316,7 +330,7 @@ class App(ctk.CTk):
 
         self.remove_model_menu()
 
-        print(self.checkbox_maternal_immunity_value[0].get())
+        print(self.checkbox_treatment_value[0].get())
 
         self.menu_present = True
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
