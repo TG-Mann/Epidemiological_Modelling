@@ -27,8 +27,13 @@ class App(ctk.CTk):
         self.button_pady = 20
         self.menu_present = False
 
+        self.num_of_charts = 0
         self.types_of_chart = []
         self.checkbox_values = []
+
+        self.types_of_detail = []
+        self.checkbox_values_detail = []
+
 
         # removes titlebar
         self.overrideredirect(True)
@@ -172,15 +177,56 @@ class App(ctk.CTk):
     def detail_menu(self):
 
         self.remove_model_menu()
-
         self.menu_present = True
-        self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
-        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
-        self.sidebar_frame3.grid_rowconfigure(5, weight=1)
 
-        self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Details",
-                                       font=ctk.CTkFont(self.font, size=30, weight="bold"))
+        self.num_of_charts = 1
+        if (self.segmented_button.get()) == "Two":
+            self.num_of_charts = 2
+        if (self.segmented_button.get()) == "Three":
+            self.num_of_charts = 3
+        if (self.segmented_button.get()) == "Four":
+            self.num_of_charts = 4
+
+        self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
+        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
+        self.sidebar_frame3.grid_rowconfigure((1,2,3,4,5,6,7,8), weight=1)
+
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Models", font=ctk.CTkFont(self.font, size=30, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
+
+        self.button_padding = 10
+
+        self.types_of_detail = []
+        self.checkbox_values_detail = []
+
+        # creates a number of selection option per chart
+        i = 0
+        while (i < self.num_of_charts):
+
+            #code for selecting a model
+            self.types_of_detail.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
+            self.types_of_detail[i].grid(row=i+1, column=0, padx=5, pady=5, sticky="ew")
+            self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Model " + str(i+1), font=ctk.CTkFont(self.font, size=20, weight="bold"))
+            self.logo_label.grid(row=0, column=0, padx=15, pady=15, columnspan=2, sticky="nsew")
+
+            self.checkbox_values_detail.append(ctk.StringVar(value = "None"))
+            self.checkbox_vital_dynamics = ctk.CTkRadioButton(master=self.types_of_detail[i], text = "Vital Dynamics", value="Vital Dynamics", variable=self.checkbox_values_detail[i],
+                                                   width = 25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+            self.checkbox_vital_dynamics.grid(row=1, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+
+            self.checkbox_seasonal_forcing_beta = ctk.CTkRadioButton(master=self.types_of_detail[i], text = "Seasonal Forcing (Beta)", value="Seasonal Forcing (Beta)", variable=self.checkbox_values_detail[i],
+                                                    width = 25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+            self.checkbox_seasonal_forcing_beta.grid(row=2, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+
+            self.checkbox_seasonal_forcing_rates = ctk.CTkRadioButton(master=self.types_of_detail[i], text="Seasonal Forcing (Birth/Death Rates)", value="Seasonal Forcing (Birth/Death Rates)", variable=self.checkbox_values_detail[i],
+                                                      width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+            self.checkbox_seasonal_forcing_rates.grid(row=3, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+
+            self.checkbox_general_contact_rates = ctk.CTkRadioButton(master=self.types_of_detail[i], text="General Contact Rates", value="General Contact Rates", variable=self.checkbox_values_detail[i],
+                                                   width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+            self.checkbox_general_contact_rates.grid(row=4, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
+
+            i += 1
 
     def parameters_menu(self):
 
