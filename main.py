@@ -127,7 +127,7 @@ class App(ctk.CTk):
 
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
-        self.sidebar_frame3.grid_rowconfigure((1,2,3,4,5,6,7,8), weight=1)
+        self.sidebar_frame3.grid_rowconfigure((1,2,3,4,5,6,7,8), weight=0)
 
         self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Models", font=ctk.CTkFont(self.font, size=30, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
@@ -137,39 +137,51 @@ class App(ctk.CTk):
         self.types_of_chart = []
         self.checkbox_values = []
 
+        self.text_size = 16
+        self.radio_button_height = 16
+        self.title_size = 20
+        self.title_padding = 5
+        self.frame_padding = 2
+
         # creates a number of selection option per chart
         i = 0
         while (i < self.num_of_charts):
 
             #code for selecting a model
-            self.types_of_chart.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
-            self.types_of_chart[i].grid(row=i+1, column=0, padx=5, pady=5, sticky="ew")
-            self.logo_label = ctk.CTkLabel(self.types_of_chart[i], text="Model " + str(i+1), font=ctk.CTkFont(self.font, size=20, weight="bold"))
-            self.logo_label.grid(row=0, column=0, padx=15, pady=15, columnspan=2, sticky="nsew")
+            self.types_of_chart.append(ctk.CTkFrame(master=self.sidebar_frame3))
+            self.types_of_chart[i].grid(row=i+1, column=0, padx=self.frame_padding, pady=self.frame_padding, sticky="ew")
+            self.logo_label = ctk.CTkLabel(self.types_of_chart[i], text="Model " + str(i+1), font=ctk.CTkFont(self.font, size=self.title_size, weight="bold"))
+            self.logo_label.grid(row=0, column=0, padx=self.title_padding, pady=self.title_padding, columnspan=2, sticky="nsew")
 
             self.checkbox_values.append(ctk.StringVar(value = "SIR"))
             self.checkbox_sir = ctk.CTkRadioButton(master=self.types_of_chart[i], text = "SIR", value="SIR", variable=self.checkbox_values[i],
-                                                   width = 25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                                                   radiobutton_width=self.radio_button_height, radiobutton_height=self.radio_button_height,
+                                                   width = 25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=self.text_size, weight="bold"))
             self.checkbox_sir.grid(row=1, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_seir = ctk.CTkRadioButton(master=self.types_of_chart[i], text = "SEIR", value="SEIR", variable=self.checkbox_values[i],
-                                                    width = 25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                                                    radiobutton_width=self.radio_button_height, radiobutton_height=self.radio_button_height,
+                                                    width = 25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=self.text_size, weight="bold"))
             self.checkbox_seir.grid(row=1, column=1, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_seqijr = ctk.CTkRadioButton(master=self.types_of_chart[i], text="SEQIJR", value="SEQIJR", variable=self.checkbox_values[i],
-                                                      width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                                                      radiobutton_width=self.radio_button_height, radiobutton_height=self.radio_button_height,
+                                                      width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=self.text_size, weight="bold"))
             self.checkbox_seqijr.grid(row=2, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_sis = ctk.CTkRadioButton(master=self.types_of_chart[i], text="SIS", value="SIS", variable=self.checkbox_values[i],
-                                                   width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                                                   radiobutton_width=self.radio_button_height, radiobutton_height=self.radio_button_height,
+                                                   width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=self.text_size, weight="bold"))
             self.checkbox_sis.grid(row=2, column=1, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_sird = ctk.CTkRadioButton(master=self.types_of_chart[i], text="SIRD", value="SIRD", variable=self.checkbox_values[i],
-                                                    width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                                                    radiobutton_width=self.radio_button_height, radiobutton_height=self.radio_button_height,
+                                                    width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=self.text_size, weight="bold"))
             self.checkbox_sird.grid(row=3, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_msir = ctk.CTkRadioButton(master=self.types_of_chart[i], text="MSIR", value="MSIR", variable=self.checkbox_values[i],
-                                                    width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                                                    radiobutton_width=self.radio_button_height, radiobutton_height=self.radio_button_height,
+                                                    width=25, fg_color=self.secondary_colour, font=ctk.CTkFont(self.font, size=self.text_size, weight="bold"))
             self.checkbox_msir.grid(row=3, column=1, padx=self.button_padding, pady=self.button_padding, columnspan=1, sticky="nsew")
 
             i += 1
@@ -204,10 +216,15 @@ class App(ctk.CTk):
         while (i < self.num_of_charts):
 
             #code for selecting a model
-            self.types_of_detail.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
-            self.types_of_detail[i].grid(row=i+1, column=0, padx=5, pady=5, sticky="ew")
+            if (self.num_of_charts == 4):
+                self.types_of_detail.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
+                self.types_of_detail[i].grid(row=i+1, column=0, padx=5, pady=5, sticky="ew")
+            else:
+                self.types_of_detail.append(ctk.CTkFrame(master=self.sidebar_frame3))
+                self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
+
             self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Model " + str(i+1), font=ctk.CTkFont(self.font, size=20, weight="bold"))
-            self.logo_label.grid(row=0, column=0, padx=15, pady=15, columnspan=2, sticky="nsew")
+            self.logo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
 
             self.checkbox_values_detail.append(ctk.StringVar(value = "None"))
             self.checkbox_vital_dynamics = ctk.CTkRadioButton(master=self.types_of_detail[i], text = "Vital Dynamics", value="Vital Dynamics", variable=self.checkbox_values_detail[i],
