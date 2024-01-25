@@ -76,7 +76,7 @@ class App(ctk.CTk):
         self.sidebar_button_6.grid(row=7, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2, sticky = "nsew" )
 
         # number of charts frame
-        self.choice_frame = ctk.CTkFrame(master=self.sidebar_frame)
+        self.choice_frame = ctk.CTkFrame(master=self.sidebar_frame , fg_color=self.background_colour)
         self.choice_frame.grid(row=1, column=0, padx=5, pady=5)
         self.logo_label = ctk.CTkLabel(self.choice_frame, text="Number of Graphs", font=ctk.CTkFont(self.font, size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=5, pady=5, columnspan=1, sticky="nsew")
