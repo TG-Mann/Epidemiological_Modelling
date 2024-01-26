@@ -43,6 +43,9 @@ class App(ctk.CTk):
         self.checkbox_treatment_value = []
         self.checkbox_seasonal_forcing_value = []
 
+        # Parameter Menu Variables
+        self.slider_value_susceptible = []
+        self.slider_value_infected = []
         # removes titlebar
         self.overrideredirect(True)
 
@@ -123,7 +126,12 @@ class App(ctk.CTk):
         print(self.segmented_button.get())
 
     def setup_chart(self):
-        fig = Figure(figsize=(6, 7), facecolor=self.background_colour, alpha=0.9)
+
+        print(self.slider_value_susceptible[0].get())
+        #print(self.slider_value_susceptible[1].get())
+        print(self.checkbox_treatment_value[0].get())
+
+        fig = Figure(figsize=(7, 7), facecolor=self.background_colour, alpha=0.9)
         ax = fig.add_subplot()
         ax.set_facecolor(self.background_colour)
         ax.set_alpha(0.9)
@@ -342,6 +350,8 @@ class App(ctk.CTk):
         self.button_padding = 10
 
         self.types_of_detail = []
+        self.slider_value_susceptible = []
+        self.slider_value_infected = []
 
         # creates a number of selection option per chart
         i = 0
@@ -365,7 +375,38 @@ class App(ctk.CTk):
                                                font=ctk.CTkFont(self.font, size=20, weight="bold"))
                 self.logo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
 
+            self.number_of_sliders = 0
+
+            print(self.checkbox_values[i].get())
+            if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SIS"
+                    or self.checkbox_values[i].get() == "SEIR"):
+
+                # label and slider for susceptible
+                self.number_of_sliders += 1
+                self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Number of Susceptible", font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                self.logo_label.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2, sticky="nsew")
+                self.number_of_sliders += 1
+                self.slider_value_susceptible.append(ctk.IntVar(value=50))
+                self.slider_susceptible = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000, variable=self.slider_value_susceptible[i])
+                self.slider_susceptible.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+
+                # label and slider for Infected
+                self.number_of_sliders += 1
+                self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Number of Infected", font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                self.logo_label.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2, sticky="nsew")
+                self.number_of_sliders += 1
+                self.slider_value_infected.append(ctk.IntVar(value=50))
+                self.slider_infected = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000, variable=self.slider_value_infected[i])
+                self.slider_infected.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+
+                # if to now check for R
+
+                # if to now check for E
+
+                # now can add beta and gamma (no if needed for these)
+
             i += 1
+        
 
     def remove_model_menu(self):
 
