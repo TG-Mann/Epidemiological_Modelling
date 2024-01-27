@@ -82,7 +82,7 @@ def SIR(Values, t):
 
 
 def odeInt():
-    ts = np.arange(0, 60, 0.01)
+    ts = np.arange(0, 110, 0.01)
 
     # this is the bit to tweak for more equations
     Us = odeint(SIR, [s, i, r], ts)
