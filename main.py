@@ -90,21 +90,21 @@ class App(ctk.CTk):
         self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Details",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.detail_menu, state= "disabled")
+                                              fg_color=self.background_colour, command=self.detail_menu, state="disabled")
         self.sidebar_button_2.grid(row=3, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
         self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Parameters",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.parameters_menu, state= "disabled")
+                                              fg_color=self.background_colour, command=self.parameters_menu, state="disabled")
         self.sidebar_button_3.grid(row=4, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
         self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Simulate",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.setup_chart, state= "disabled")
+                                              fg_color=self.background_colour, command=self.setup_chart, state="disabled")
         self.sidebar_button_4.grid(row=5, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
@@ -131,15 +131,15 @@ class App(ctk.CTk):
 
         self.segmented_button = ctk.CTkSegmentedButton(self.choice_frame, values=["One", "Two", "Three", "Four"],
                                                        height=40, width=100, selected_color=self.secondary_colour,
-                                                       font=(self.font, self.button_font_size - 6), command= self.set_buttons)
+                                                       font=(self.font, self.button_font_size - 6), command=self.set_buttons)
         self.segmented_button.grid(row=1, column=0, padx=5, pady=5, columnspan=1)
         self.segmented_button.set("One")
 
 
     def set_buttons(self, value):
-        self.sidebar_button_2.configure(border_color=self.un_active_button, state= "disabled")
-        self.sidebar_button_3.configure(border_color=self.un_active_button, state= "disabled")
-        self.sidebar_button_4.configure(border_color=self.un_active_button, state= "disabled")
+        self.sidebar_button_2.configure(border_color=self.un_active_button, state="disabled")
+        self.sidebar_button_3.configure(border_color=self.un_active_button, state="disabled")
+        self.sidebar_button_4.configure(border_color=self.un_active_button, state="disabled")
 
     def setup_chart(self):
 
@@ -267,7 +267,6 @@ class App(ctk.CTk):
         self.checkbox_maternal_immunity_value = []
         self.checkbox_deaths_value = []
         self.checkbox_seasonal_forcing_value = []
-
 
         # creates a number of selection option per chart
         i = 0
@@ -473,6 +472,8 @@ class App(ctk.CTk):
                     self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", i)
                 else:
                     self.slider_value_seasonal_forcing_severity.append("No")
+
+                #check for treatment models
             i += 1
         
 
