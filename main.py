@@ -46,6 +46,13 @@ class App(ctk.CTk):
         # Parameter Menu Variables
         self.slider_value_susceptible = []
         self.slider_value_infected = []
+        self.slider_value_recovered = []
+        self.slider_value_exposed = []
+        self.slider_value_transmission = []
+        self.slider_value_recovery = []
+        self.slider_value_exposure = []
+        self.slider_value_birthrates = []
+
         # removes titlebar
         self.overrideredirect(True)
 
@@ -127,9 +134,8 @@ class App(ctk.CTk):
 
     def setup_chart(self):
 
-        print(self.slider_value_susceptible[0].get())
-        #print(self.slider_value_susceptible[1].get())
-        print(self.checkbox_treatment_value[0].get())
+        print(self.slider_value_birthrates[0].get())
+        print(self.slider_value_birthrates[1].get())
 
         fig = Figure(figsize=(7, 7), facecolor=self.background_colour, alpha=0.9)
         ax = fig.add_subplot()
@@ -341,7 +347,7 @@ class App(ctk.CTk):
 
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
-        self.sidebar_frame3.grid_rowconfigure((1, 2, 3, 4, 5, 6, 7, 8), weight=1)
+        self.sidebar_frame3.grid_rowconfigure((1, 2, 3, 4, 5, 6, 7, 8, 9), weight=1)
 
         self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Parameters",
                                        font=ctk.CTkFont(self.font, size=30, weight="bold"))
@@ -352,13 +358,20 @@ class App(ctk.CTk):
         self.types_of_detail = []
         self.slider_value_susceptible = []
         self.slider_value_infected = []
+        self.slider_value_recovered = []
+        self.slider_value_exposed = []
+        self.slider_value_transmission = []
+        self.slider_value_recovery = []
+        self.slider_value_exposure = []
+        self.slider_value_birthrates = []
+
 
         # creates a number of selection option per chart
         i = 0
         while i < self.number_of_charts():
 
             # code for selecting a model
-            if self.number_of_charts() == 4 or self.number_of_charts() == 3:
+            if self.number_of_charts() == 4 or self.number_of_charts() == 3 or self.number_of_charts() == 2:
                 self.types_of_detail.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
                 self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
             else:
@@ -383,8 +396,8 @@ class App(ctk.CTk):
 
                 # label and slider for susceptible
                 self.number_of_sliders += 1
-                self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Number of Susceptible", font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                self.logo_label.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2, sticky="nsew")
+                self.logo_label_susceptible = ctk.CTkLabel(self.types_of_detail[i], text="Number of Susceptible", font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                self.logo_label_susceptible.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2, sticky="nsew")
                 self.number_of_sliders += 1
                 self.slider_value_susceptible.append(ctk.IntVar(value=50))
                 self.slider_susceptible = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000, variable=self.slider_value_susceptible[i])
@@ -392,21 +405,104 @@ class App(ctk.CTk):
 
                 # label and slider for Infected
                 self.number_of_sliders += 1
-                self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Number of Infected", font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                self.logo_label.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2, sticky="nsew")
+                self.logo_label_infected = ctk.CTkLabel(self.types_of_detail[i], text="Number of Infected", font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                self.logo_label_infected.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2, sticky="nsew")
                 self.number_of_sliders += 1
                 self.slider_value_infected.append(ctk.IntVar(value=50))
                 self.slider_infected = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000, variable=self.slider_value_infected[i])
                 self.slider_infected.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
 
-                # if to now check for R
+                # label and slider for Recovered
+                if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SEIR"):
+                    self.number_of_sliders += 1
+                    self.logo_label_recovered = ctk.CTkLabel(self.types_of_detail[i], text="Number of Recovered",
+                                                            font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                    self.logo_label_recovered.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2,
+                                                 sticky="nsew")
+                    self.number_of_sliders += 1
+                    self.slider_value_recovered.append(ctk.IntVar(value=50))
+                    self.slider_recovered = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
+                                                         variable=self.slider_value_recovered[i])
+                    self.slider_recovered.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                              sticky="nsew")
 
-                # if to now check for E
+                # label and slider for Exposed
+                if (self.checkbox_values[i].get() == "SEIR"):
 
-                # now can add beta and gamma (no if needed for these)
+                    # label and slider for Exposed
+                    self.number_of_sliders += 1
+                    self.logo_label_exposed = ctk.CTkLabel(self.types_of_detail[i], text="Number of Exposed",
+                                                             font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                    self.logo_label_exposed.grid(row=self.number_of_sliders, column=0, padx=0, pady=0,
+                                                   columnspan=2,
+                                                   sticky="nsew")
+                    self.number_of_sliders += 1
+                    self.slider_value_exposed.append(ctk.IntVar(value=50))
+                    self.slider_exposed = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
+                                                          variable=self.slider_value_exposed[i])
+                    self.slider_exposed.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                               sticky="nsew")
 
+                    # label and slider for Exposure
+                    self.number_of_sliders += 1
+                    self.logo_label_exposure = ctk.CTkLabel(self.types_of_detail[i], text="Exposure Rate",
+                                                           font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                    self.logo_label_exposure.grid(row=self.number_of_sliders, column=0, padx=0, pady=0,
+                                                 columnspan=2,
+                                                 sticky="nsew")
+                    self.number_of_sliders += 1
+                    self.slider_value_exposure.append(ctk.IntVar(value=50))
+                    self.slider_exposure = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
+                                                        variable=self.slider_value_exposure[i])
+                    self.slider_exposure.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                             sticky="nsew")
+
+                # label and slider for transmission rate
+                self.number_of_sliders += 1
+                self.logo_label_transmission = ctk.CTkLabel(self.types_of_detail[i], text="Transmission rate (Beta)",
+                                                        font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                self.logo_label_transmission.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2,
+                                              sticky="nsew")
+                self.number_of_sliders += 1
+                self.slider_value_transmission.append(ctk.IntVar(value=50))
+                self.slider_transmission = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
+                                                     variable=self.slider_value_transmission[i])
+                self.slider_transmission.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                          sticky="nsew")
+
+                # label and slider for recovery rate
+                self.number_of_sliders += 1
+                self.logo_label_recovery = ctk.CTkLabel(self.types_of_detail[i], text="Recovery rate (Gamma)",
+                                                            font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                self.logo_label_recovery.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2,
+                                                  sticky="nsew")
+                self.number_of_sliders += 1
+                self.slider_value_recovery.append(ctk.IntVar(value=50))
+                self.slider_recovery = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
+                                                         variable=self.slider_value_recovery[i])
+                self.slider_recovery.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                              sticky="nsew")
+
+                if(self.checkbox_birthrates_value[i].get() == "Birth Rates"):
+
+                    self.create_slider(self.slider_value_birthrates, "Birth rates", i)
             i += 1
         
+
+    def create_slider(self, array, text, i):
+
+        # label and slider for recovery rate
+        self.number_of_sliders += 1
+        self.label = ctk.CTkLabel(self.types_of_detail[i], text=text,
+                                                font=ctk.CTkFont(self.font, size=12, weight="bold"))
+        self.label.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2,
+                                      sticky="nsew")
+        self.number_of_sliders += 1
+        array.append(ctk.IntVar(value=50))
+        self.slider = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
+                                             variable=array[i])
+        self.slider.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                  sticky="nsew")
 
     def remove_model_menu(self):
 
