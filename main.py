@@ -21,6 +21,7 @@ class App(ctk.CTk):
         # UI Parameters
         self.background_colour = "#474645"
         self.secondary_colour = "#193b89"
+        self.un_active_button = "#282b2c"
         self.font = "MS Serif"
         self.button_height = 55
         self.button_font_size = 20
@@ -86,24 +87,24 @@ class App(ctk.CTk):
         self.sidebar_button_1.grid(row=2, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
-        self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text="Details",
+        self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Details",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.detail_menu)
+                                              fg_color=self.background_colour, command=self.detail_menu, state= "disabled")
         self.sidebar_button_2.grid(row=3, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
-        self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text="Parameters",
+        self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Parameters",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.parameters_menu)
+                                              fg_color=self.background_colour, command=self.parameters_menu, state= "disabled")
         self.sidebar_button_3.grid(row=4, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
-        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text="Simulate",
+        self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Simulate",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.setup_chart)
+                                              fg_color=self.background_colour, command=self.setup_chart, state= "disabled")
         self.sidebar_button_4.grid(row=5, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
@@ -127,14 +128,18 @@ class App(ctk.CTk):
         self.logo_label = ctk.CTkLabel(self.choice_frame, text="Number of Graphs", font=ctk.CTkFont(self.font, size=20,
                                                                                                     weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=5, pady=5, columnspan=1, sticky="nsew")
+
         self.segmented_button = ctk.CTkSegmentedButton(self.choice_frame, values=["One", "Two", "Three", "Four"],
                                                        height=40, width=100, selected_color=self.secondary_colour,
-                                                       font=(self.font, self.button_font_size - 6))
+                                                       font=(self.font, self.button_font_size - 6), command= self.set_buttons)
         self.segmented_button.grid(row=1, column=0, padx=5, pady=5, columnspan=1)
         self.segmented_button.set("One")
 
-    def segmented_button_value(self):
-        print(self.segmented_button.get())
+
+    def set_buttons(self, value):
+        self.sidebar_button_2.configure(border_color=self.un_active_button, state= "disabled")
+        self.sidebar_button_3.configure(border_color=self.un_active_button, state= "disabled")
+        self.sidebar_button_4.configure(border_color=self.un_active_button, state= "disabled")
 
     def setup_chart(self):
 
@@ -172,6 +177,9 @@ class App(ctk.CTk):
             return 1
 
     def model_menu(self):
+
+        self.sidebar_button_2.configure(border_color=self.secondary_colour, state= "normal")
+
         self.remove_model_menu()
         self.menu_present = True
 
@@ -240,6 +248,8 @@ class App(ctk.CTk):
 
         self.remove_model_menu()
         self.menu_present = True
+
+        self.sidebar_button_3.configure(border_color=self.secondary_colour, state= "normal")
 
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
@@ -353,6 +363,8 @@ class App(ctk.CTk):
 
         self.remove_model_menu()
         self.menu_present = True
+
+        self.sidebar_button_4.configure(border_color=self.secondary_colour, state= "normal")
 
         self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
         self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
