@@ -44,6 +44,7 @@ class App(ctk.CTk):
         self.checkbox_seasonal_forcing_value = []
 
         # Parameter Menu Variables
+        self.slider_value_time = []
         self.slider_value_susceptible = []
         self.slider_value_infected = []
         self.slider_value_recovered = []
@@ -53,6 +54,8 @@ class App(ctk.CTk):
         self.slider_value_exposure = []
         self.slider_value_birthrates = []
         self.slider_value_maternal_immunity_loss = []
+        self.slider_value_death_rate = []
+        self.slider_value_seasonal_forcing_severity = []
 
         # removes titlebar
         self.overrideredirect(True)
@@ -135,7 +138,12 @@ class App(ctk.CTk):
 
     def setup_chart(self):
 
-        #print(self.slider_value_maternal_immunity_loss[0].get())
+        #print(self.slider_value_maternal_immunity_loss[0])
+        #print(self.slider_value_maternal_immunity_loss[1].get())
+        #print(self.slider_value_maternal_immunity_loss[2])
+
+
+
 
         fig = Figure(figsize=(7, 7), facecolor=self.background_colour, alpha=0.9)
         ax = fig.add_subplot()
@@ -250,6 +258,7 @@ class App(ctk.CTk):
         self.checkbox_deaths_value = []
         self.checkbox_seasonal_forcing_value = []
 
+
         # creates a number of selection option per chart
         i = 0
         while i < self.number_of_charts():
@@ -315,7 +324,7 @@ class App(ctk.CTk):
 
             self.checkbox_deaths_value.append(ctk.StringVar(value="No"))
             self.checkbox_deaths = ctk.CTkCheckBox(master=self.types_of_detail[i],
-                                                              text="Deaths",
+                                                              text="Deaths from Disease Rate",
                                                               onvalue="Deaths", offvalue="No",
                                                               variable=self.checkbox_deaths_value[i],
                                                               width=25, fg_color=self.secondary_colour,
@@ -356,6 +365,7 @@ class App(ctk.CTk):
         self.button_padding = 10
 
         self.types_of_detail = []
+        self.slider_value_time = []
         self.slider_value_susceptible = []
         self.slider_value_infected = []
         self.slider_value_recovered = []
@@ -365,6 +375,8 @@ class App(ctk.CTk):
         self.slider_value_exposure = []
         self.slider_value_birthrates = []
         self.slider_value_maternal_immunity_loss = []
+        self.slider_value_death_rate = []
+        self.slider_value_seasonal_forcing_severity = []
 
 
         # creates a number of selection option per chart
@@ -393,6 +405,9 @@ class App(ctk.CTk):
 
             if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SIS"
                     or self.checkbox_values[i].get() == "SEIR"):
+
+                # label and slider for time
+                self.create_slider(self.slider_value_time, "Time", i)
 
                 # label and slider for susceptible
                 self.create_slider(self.slider_value_susceptible, "Number of Susceptible", i)
@@ -436,6 +451,16 @@ class App(ctk.CTk):
                     self.create_slider(self.slider_value_maternal_immunity_loss, "Rate of Maternal Immunity Loss", i)
                 else:
                     self.slider_value_maternal_immunity_loss.append("No")
+
+                if self.checkbox_deaths_value[i].get() == "Deaths":
+                    self.create_slider(self.slider_value_death_rate, "Rate of Deaths from Disease", i)
+                else:
+                    self.slider_value_death_rate.append("No")
+
+                if self.checkbox_seasonal_forcing_value[i].get() == "Seasonal Forcing":
+                    self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", i)
+                else:
+                    self.slider_value_seasonal_forcing_severity.append("No")
             i += 1
         
 
