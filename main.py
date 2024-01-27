@@ -52,6 +52,7 @@ class App(ctk.CTk):
         self.slider_value_recovery = []
         self.slider_value_exposure = []
         self.slider_value_birthrates = []
+        self.slider_value_maternal_immunity_loss = []
 
         # removes titlebar
         self.overrideredirect(True)
@@ -134,8 +135,7 @@ class App(ctk.CTk):
 
     def setup_chart(self):
 
-        print(self.slider_value_birthrates[0].get())
-        print(self.slider_value_birthrates[1].get())
+        #print(self.slider_value_maternal_immunity_loss[0].get())
 
         fig = Figure(figsize=(7, 7), facecolor=self.background_colour, alpha=0.9)
         ax = fig.add_subplot()
@@ -364,6 +364,7 @@ class App(ctk.CTk):
         self.slider_value_recovery = []
         self.slider_value_exposure = []
         self.slider_value_birthrates = []
+        self.slider_value_maternal_immunity_loss = []
 
 
         # creates a number of selection option per chart
@@ -390,108 +391,57 @@ class App(ctk.CTk):
 
             self.number_of_sliders = 0
 
-            print(self.checkbox_values[i].get())
             if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SIS"
                     or self.checkbox_values[i].get() == "SEIR"):
 
                 # label and slider for susceptible
-                self.number_of_sliders += 1
-                self.logo_label_susceptible = ctk.CTkLabel(self.types_of_detail[i], text="Number of Susceptible", font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                self.logo_label_susceptible.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2, sticky="nsew")
-                self.number_of_sliders += 1
-                self.slider_value_susceptible.append(ctk.IntVar(value=50))
-                self.slider_susceptible = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000, variable=self.slider_value_susceptible[i])
-                self.slider_susceptible.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+                self.create_slider(self.slider_value_susceptible, "Number of Susceptible", i)
 
                 # label and slider for Infected
-                self.number_of_sliders += 1
-                self.logo_label_infected = ctk.CTkLabel(self.types_of_detail[i], text="Number of Infected", font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                self.logo_label_infected.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2, sticky="nsew")
-                self.number_of_sliders += 1
-                self.slider_value_infected.append(ctk.IntVar(value=50))
-                self.slider_infected = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000, variable=self.slider_value_infected[i])
-                self.slider_infected.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+                self.create_slider(self.slider_value_infected, "Number of Infected", i)
 
                 # label and slider for Recovered
-                if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SEIR"):
-                    self.number_of_sliders += 1
-                    self.logo_label_recovered = ctk.CTkLabel(self.types_of_detail[i], text="Number of Recovered",
-                                                            font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                    self.logo_label_recovered.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2,
-                                                 sticky="nsew")
-                    self.number_of_sliders += 1
-                    self.slider_value_recovered.append(ctk.IntVar(value=50))
-                    self.slider_recovered = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
-                                                         variable=self.slider_value_recovered[i])
-                    self.slider_recovered.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
-                                              sticky="nsew")
+                if self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SEIR":
+
+                    self.create_slider(self.slider_value_recovered, "Number of Recovered", i)
+                else:
+                    self.slider_value_recovered.append("No")
 
                 # label and slider for Exposed
-                if (self.checkbox_values[i].get() == "SEIR"):
+                if self.checkbox_values[i].get() == "SEIR":
 
                     # label and slider for Exposed
-                    self.number_of_sliders += 1
-                    self.logo_label_exposed = ctk.CTkLabel(self.types_of_detail[i], text="Number of Exposed",
-                                                             font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                    self.logo_label_exposed.grid(row=self.number_of_sliders, column=0, padx=0, pady=0,
-                                                   columnspan=2,
-                                                   sticky="nsew")
-                    self.number_of_sliders += 1
-                    self.slider_value_exposed.append(ctk.IntVar(value=50))
-                    self.slider_exposed = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
-                                                          variable=self.slider_value_exposed[i])
-                    self.slider_exposed.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
-                                               sticky="nsew")
+                    self.create_slider(self.slider_value_exposed, "Number of Exposed", i)
 
                     # label and slider for Exposure
-                    self.number_of_sliders += 1
-                    self.logo_label_exposure = ctk.CTkLabel(self.types_of_detail[i], text="Exposure Rate",
-                                                           font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                    self.logo_label_exposure.grid(row=self.number_of_sliders, column=0, padx=0, pady=0,
-                                                 columnspan=2,
-                                                 sticky="nsew")
-                    self.number_of_sliders += 1
-                    self.slider_value_exposure.append(ctk.IntVar(value=50))
-                    self.slider_exposure = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
-                                                        variable=self.slider_value_exposure[i])
-                    self.slider_exposure.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
-                                             sticky="nsew")
+                    self.create_slider(self.slider_value_exposure, "Exposure Rate", i)
+
+                else:
+                    self.slider_value_exposed.append("No")
+                    self.slider_value_exposure.append("No")
+
 
                 # label and slider for transmission rate
-                self.number_of_sliders += 1
-                self.logo_label_transmission = ctk.CTkLabel(self.types_of_detail[i], text="Transmission rate (Beta)",
-                                                        font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                self.logo_label_transmission.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2,
-                                              sticky="nsew")
-                self.number_of_sliders += 1
-                self.slider_value_transmission.append(ctk.IntVar(value=50))
-                self.slider_transmission = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
-                                                     variable=self.slider_value_transmission[i])
-                self.slider_transmission.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
-                                          sticky="nsew")
+                self.create_slider(self.slider_value_transmission, "Transmission Rate (Beta)", i)
 
                 # label and slider for recovery rate
-                self.number_of_sliders += 1
-                self.logo_label_recovery = ctk.CTkLabel(self.types_of_detail[i], text="Recovery rate (Gamma)",
-                                                            font=ctk.CTkFont(self.font, size=12, weight="bold"))
-                self.logo_label_recovery.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2,
-                                                  sticky="nsew")
-                self.number_of_sliders += 1
-                self.slider_value_recovery.append(ctk.IntVar(value=50))
-                self.slider_recovery = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
-                                                         variable=self.slider_value_recovery[i])
-                self.slider_recovery.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
-                                              sticky="nsew")
+                self.create_slider(self.slider_value_recovery, "Recovery Rate (Gamma)", i)
 
-                if(self.checkbox_birthrates_value[i].get() == "Birth Rates"):
+                if self.checkbox_birthrates_value[i].get() == "Birth Rates":
+                    self.create_slider(self.slider_value_birthrates, "Birth rate", i)
+                else:
+                    self.slider_value_birthrates.append("No")
 
-                    self.create_slider(self.slider_value_birthrates, "Birth rates", i)
+                if self.checkbox_maternal_immunity_value[i].get() == "Maternal Immunity":
+                    self.create_slider(self.slider_value_maternal_immunity_loss, "Rate of Maternal Immunity Loss", i)
+                else:
+                    self.slider_value_maternal_immunity_loss.append("No")
             i += 1
         
 
     def create_slider(self, array, text, i):
 
-        # label and slider for recovery rate
+        # label and slider for parameters menu
         self.number_of_sliders += 1
         self.label = ctk.CTkLabel(self.types_of_detail[i], text=text,
                                                 font=ctk.CTkFont(self.font, size=12, weight="bold"))
