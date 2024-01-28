@@ -251,9 +251,14 @@ class App(ctk.CTk):
 
         self.sidebar_button_3.configure(border_color=self.secondary_colour, state= "normal")
 
-        self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
-        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
-        self.sidebar_frame3.grid_rowconfigure((1, 2, 3, 4, 5, 6, 7, 8), weight=1)
+        if self.number_of_charts() == 4 or self.number_of_charts() == 3:
+            self.sidebar_frame3 = ctk.CTkScrollableFrame(self, width=180, corner_radius=10, fg_color=self.background_colour)
+            self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
+            self.sidebar_frame3.grid_rowconfigure((1, 2, 3, 4, 5, 6, 7, 8), weight=1)
+        else:
+            self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
+            self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
+            self.sidebar_frame3.grid_rowconfigure((1, 2, 3, 4, 5, 6, 7, 8), weight=1)
 
         self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Models",
                                        font=ctk.CTkFont(self.font, size=30, weight="bold"))
@@ -274,8 +279,8 @@ class App(ctk.CTk):
 
             # code for selecting a model
             if self.number_of_charts() == 4 or self.number_of_charts() == 3:
-                self.types_of_detail.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
-                self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
+                self.types_of_detail.append(ctk.CTkFrame(master=self.sidebar_frame3))
+                self.types_of_detail[i].grid(row=i + 1, column=0, padx=0, pady=5, sticky="ew")
             else:
                 self.types_of_detail.append(ctk.CTkFrame(master=self.sidebar_frame3))
                 self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
@@ -365,8 +370,8 @@ class App(ctk.CTk):
 
         self.sidebar_button_4.configure(border_color=self.secondary_colour, state= "normal")
 
-        self.sidebar_frame3 = ctk.CTkFrame(self, width=120, corner_radius=10, fg_color=self.background_colour)
-        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
+        self.sidebar_frame3 = ctk.CTkScrollableFrame(self, width=220, corner_radius=10, fg_color=self.background_colour)
+        self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
         self.sidebar_frame3.grid_rowconfigure((1, 2, 3, 4, 5, 6, 7, 8, 9), weight=1)
 
         self.logo_label = ctk.CTkLabel(self.sidebar_frame3, text="Parameters",
@@ -395,12 +400,12 @@ class App(ctk.CTk):
         while i < self.number_of_charts():
 
             # code for selecting a model
-            if self.number_of_charts() == 4 or self.number_of_charts() == 3 or self.number_of_charts() == 2:
+            if self.number_of_charts() == 5 or self.number_of_charts() == 6 or self.number_of_charts() == 7:
                 self.types_of_detail.append(ctk.CTkScrollableFrame(master=self.sidebar_frame3))
                 self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
             else:
                 self.types_of_detail.append(ctk.CTkFrame(master=self.sidebar_frame3))
-                self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
+                self.types_of_detail[i].grid(row=i + 1, column=0, padx=0, pady=5, sticky="ew")
 
             if len(self.checkbox_values) != 0:
                 self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Model " + str(i + 1) + " (" + str(
@@ -473,23 +478,24 @@ class App(ctk.CTk):
                 else:
                     self.slider_value_seasonal_forcing_severity.append("No")
 
-                #check for treatment models
+                # tretment models
             i += 1
-        
+
 
     def create_slider(self, array, text, i):
 
         # label and slider for parameters menu
         self.number_of_sliders += 1
-        self.label = ctk.CTkLabel(self.types_of_detail[i], text=text,
-                                                font=ctk.CTkFont(self.font, size=12, weight="bold"))
-        self.label.grid(row=self.number_of_sliders, column=0, padx=0, pady=0, columnspan=2,
-                                      sticky="nsew")
+        self.container = ctk.CTkFrame(self.types_of_detail[i], border_color=self.background_colour, border_width=2)
+        self.container.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",padx=5, pady=5)
+
+        self.label = ctk.CTkLabel(self.container, text=text, font=ctk.CTkFont(self.font, size=12, weight="bold"))
+        self.label.grid(row=0, column=0, padx=3, pady=3, columnspan=2, sticky="nsew")
         self.number_of_sliders += 1
         array.append(ctk.IntVar(value=50))
-        self.slider = ctk.CTkSlider(self.types_of_detail[i], from_=1, to=10000,
-                                             variable=array[i])
-        self.slider.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+
+        self.slider = ctk.CTkSlider(self.container, from_=1, to=10000, variable=array[i])
+        self.slider.grid(row=1, column=0, padx=5, pady=5, columnspan=2,
                                   sticky="nsew")
 
     def remove_model_menu(self):
