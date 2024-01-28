@@ -57,6 +57,11 @@ class App(ctk.CTk):
         self.slider_value_maternal_immunity_loss = []
         self.slider_value_death_rate = []
         self.slider_value_seasonal_forcing_severity = []
+        self.slider_value_num_in_treatment = []
+        self.slider_value_reduced_infect_treatment = []
+        self.slider_value_selected_treatment = []
+        self.slider_value_quarantined = []
+        self.slider_value_isolated = []
 
         # removes titlebar
         self.overrideredirect(True)
@@ -393,6 +398,11 @@ class App(ctk.CTk):
         self.slider_value_maternal_immunity_loss = []
         self.slider_value_death_rate = []
         self.slider_value_seasonal_forcing_severity = []
+        self.slider_value_num_in_treatment = []
+        self.slider_value_reduced_infect_treatment = []
+        self.slider_value_selected_treatment = []
+        self.slider_value_quarantined = []
+        self.slider_value_isolated = []
 
 
         # creates a number of selection option per chart
@@ -478,7 +488,22 @@ class App(ctk.CTk):
                 else:
                     self.slider_value_seasonal_forcing_severity.append("No")
 
-                # tretment models
+                if self.checkbox_treatment_value[i].get() == "Treatment Model":
+                    self.number_of_sliders += 1
+                    self.label = ctk.CTkLabel(self.types_of_detail[i], text="Treatment Model Parameters", font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew", padx=5, pady=5)
+
+                    self.create_slider(self.slider_value_num_in_treatment, "Number in Treatment", i)
+                    self.create_slider(self.slider_value_reduced_infect_treatment, "Reduced Infectivity from Treatment", i)
+                    self.create_slider(self.slider_value_selected_treatment, "Fraction selected for Treatment", i)
+
+                if self.checkbox_treatment_value[i].get() == "Quarantine":
+                    self.number_of_sliders += 1
+                    self.label = ctk.CTkLabel(self.types_of_detail[i], text="Quarantine Parameters", font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew", padx=5, pady=5)
+
+                    self.create_slider(self.slider_value_quarantined, "Number in Quarantine", i)
+                    self.create_slider(self.slider_value_isolated, "Number isolated", i)
             i += 1
 
 
