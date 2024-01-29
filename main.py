@@ -159,11 +159,18 @@ class App(ctk.CTk):
         ax = fig.add_subplot()
         ax.set_facecolor(self.background_colour)
         ax.set_alpha(0.9)
+        i = 0
+        number_of_models = self.number_of_charts()
+        for x in self.checkbox_values:
 
-        s, i, r, ts = odeInt()
-        ax.plot(ts, s)
-        ax.plot(ts, i)
-        ax.plot(ts, r)
+            if x.get() == "SIR":
+
+                s, i, r, ts = odeInt()
+                ax.plot(ts, s)
+                ax.plot(ts, i)
+                ax.plot(ts, r)
+
+            i += 1
 
         ax.grid(visible=True)
         canvas = FigureCanvasTkAgg(figure=fig, master=self.sidebar_frame2)

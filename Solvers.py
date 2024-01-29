@@ -76,9 +76,15 @@ def createGraph(methodHasRan):
 
 
 def SIR(Values, t):
+
     return [-beta * Values[0] * Values[1],
             beta * Values[0] * Values[1] - gamma * Values[1],
             gamma * Values[1]]
+
+def SIS(Values, t):
+
+    return [-beta * Values[0] * Values[1] + gamma * Values[1],
+            beta * Values[0] * Values[1] - gamma * Values[1]]
 
 
 def odeInt():
@@ -89,7 +95,7 @@ def odeInt():
 
     S, I, R = Us[:, 0], Us[:, 1], Us[:, 2]
 
-    return S,I,R,ts
+    return [S,I,R,ts]
 
 
 
