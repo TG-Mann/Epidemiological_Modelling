@@ -4,8 +4,10 @@ from scipy.integrate import odeint
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 s = 1500.0
+e = 1.0
 i = 1.0
 r = 0.0
+k = 0.2
 beta = 0.0005
 gamma = 0.1
 time = 60.0
@@ -86,16 +88,40 @@ def SIS(Values, t):
     return [-beta * Values[0] * Values[1] + gamma * Values[1],
             beta * Values[0] * Values[1] - gamma * Values[1]]
 
+def SEIR(Values, t):
 
-def odeInt():
-    ts = np.arange(0, 110, 0.01)
+    return [-beta * Values[0] * Values[2],
+            beta * Values[0] * Values[2] - k * Values[1],
+            k * Values[1] - gamma * Values[2],
+            gamma * Values[2]]
 
-    # this is the bit to tweak for more equations
-    Us = odeint(SIR, [s, i, r], ts)
 
-    S, I, R = Us[:, 0], Us[:, 1], Us[:, 2]
+def solver(chart_type):
+    ts = np.arange(0, 60, 0.01)
 
-    return [S,I,R,ts]
+    if chart_type == "SIR":
+
+        Us = odeint(SIR, [s, i, r], ts)
+
+        S, I, R = Us[:, 0], Us[:, 1], Us[:, 2]
+
+        return [S,I,R,ts]
+
+    if chart_type == "SIS":
+
+        Us = odeint(SIS, [s, i], ts)
+
+        S, I = Us[:, 0], Us[:, 1]
+
+        return [S,I,ts]
+
+    if chart_type == "SEIR":
+
+        Us = odeint(SEIR, [s, e, i, r], ts)
+
+        S, E, I, R = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3]
+
+        return [S,E,I,R,ts]
 
 
 

@@ -2,7 +2,7 @@ import sys
 
 import customtkinter as ctk
 from matplotlib.figure import Figure
-from Solvers import odeInt
+from Solvers import solver
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 ctk.set_appearance_mode("dark")
@@ -159,18 +159,30 @@ class App(ctk.CTk):
         ax = fig.add_subplot()
         ax.set_facecolor(self.background_colour)
         ax.set_alpha(0.9)
-        i = 0
+
         number_of_models = self.number_of_charts()
         for x in self.checkbox_values:
 
             if x.get() == "SIR":
 
-                s, i, r, ts = odeInt()
+                s, i, r, ts = solver(x.get())
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
 
-            i += 1
+            if x.get() == "SIS":
+
+                s, i, ts = solver(x.get())
+                ax.plot(ts, s)
+                ax.plot(ts, i)
+
+            if x.get() == "SEIR":
+                s, e, i, r, ts = solver(x.get())
+                ax.plot(ts, s)
+                ax.plot(ts, e)
+                ax.plot(ts, i)
+                ax.plot(ts, r)
+
 
         ax.grid(visible=True)
         canvas = FigureCanvasTkAgg(figure=fig, master=self.sidebar_frame2)
