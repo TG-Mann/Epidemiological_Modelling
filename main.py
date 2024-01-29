@@ -166,19 +166,30 @@ class App(ctk.CTk):
                 num_of_gamma = self.slider_value_recovery[y].get()
 
                 s, i, r, ts = solver(x.get(), [num_of_s, num_of_i, num_of_r, num_of_beta, num_of_gamma])
-                plot_values.append([s, i, r, ts])
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
 
             if x.get() == "SIS":
 
-                s, i, ts = solver(x.get(), [])
+                num_of_s = self.slider_value_susceptible[y].get()
+                num_of_i = self.slider_value_infected[y].get()
+                num_of_beta = self.slider_value_transmission[y].get()
+                num_of_gamma = self.slider_value_recovery[y].get()
+                s, i, ts = solver(x.get(), [num_of_s, num_of_i, num_of_beta, num_of_gamma])
                 ax.plot(ts, s)
                 ax.plot(ts, i)
 
             if x.get() == "SEIR":
-                s, e, i, r, ts = solver(x.get(), [])
+
+                num_of_s = self.slider_value_susceptible[y].get()
+                num_of_e = self.slider_value_exposed[y].get()
+                num_of_i = self.slider_value_infected[y].get()
+                num_of_r = self.slider_value_recovered[y].get()
+                num_of_beta = self.slider_value_transmission[y].get()
+                num_of_gamma = self.slider_value_recovery[y].get()
+                num_of_exposure = self.slider_value_exposure[y].get()
+                s, e, i, r, ts = solver(x.get(), [num_of_s, num_of_e, num_of_i, num_of_r, num_of_beta, num_of_gamma, num_of_exposure])
                 ax.plot(ts, s)
                 ax.plot(ts, e)
                 ax.plot(ts, i)

@@ -7,9 +7,9 @@ s = 1500.0
 e = 1.0
 i = 1.0
 r = 0.0
-k = 0.2
 beta = 0.0005
 gamma = 0.1
+exposure = 0.2
 time = 60.0
 deltat = 0.0001
 sValues = [s]
@@ -91,8 +91,8 @@ def SIS(Values, t):
 def SEIR(Values, t):
 
     return [-beta * Values[0] * Values[2],
-            beta * Values[0] * Values[2] - k * Values[1],
-            k * Values[1] - gamma * Values[2],
+            beta * Values[0] * Values[2] - exposure * Values[1],
+            exposure * Values[1] - gamma * Values[2],
             gamma * Values[2]]
 
 def setbeta(value):
@@ -100,21 +100,17 @@ def setbeta(value):
 
 def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
+    global beta
+    global gamma
+    global exposure
 
     if chart_type == "SIR":
 
         s = parameters[0]
-        print(s)
         i = parameters[1]
-        print(i)
         r = parameters[2]
-        print(r)
-        global beta
         beta = parameters[3]
-        print(beta)
-        global gamma
         gamma = parameters[4]
-        print(gamma)
 
         Us = odeint(SIR, [s, i, r], ts)
 
@@ -123,6 +119,13 @@ def solver(chart_type, parameters):
         return [S,I,R,ts]
 
     if chart_type == "SIS":
+        
+        s = parameters[0]
+        i = parameters[1]
+
+        beta = parameters[2]
+
+        gamma = parameters[3]
 
         Us = odeint(SIS, [s, i], ts)
 
@@ -131,6 +134,14 @@ def solver(chart_type, parameters):
         return [S,I,ts]
 
     if chart_type == "SEIR":
+
+        s = parameters[0]
+        e = parameters[1]
+        i = parameters[2]
+        r = parameters[3]
+        beta = parameters[4]
+        gamma = parameters[5]
+        exposure = parameters[6]
 
         Us = odeint(SEIR, [s, e, i, r], ts)
 
