@@ -1,7 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.integrate import odeint
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 s = 1500.0
 e = 1.0

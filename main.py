@@ -1,10 +1,8 @@
 import sys
-
 import customtkinter as ctk
 from matplotlib.figure import Figure
 from Solvers import solver
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
 
 ctk.set_appearance_mode("dark")
 
@@ -14,7 +12,7 @@ class App(ctk.CTk):
         super().__init__()
 
         # configure window
-        self.title("Epidemiological Modelling")
+        # self.title("Epidemiological Modelling")
         self.geometry("1500x800")
         self.width = 1500
         self.height = 800
@@ -96,21 +94,24 @@ class App(ctk.CTk):
         self.sidebar_button_2 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Details",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.detail_menu, state="disabled")
+                                              fg_color=self.background_colour, command=self.detail_menu,
+                                              state="disabled")
         self.sidebar_button_2.grid(row=3, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
         self.sidebar_button_3 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Parameters",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.parameters_menu, state="disabled")
+                                              fg_color=self.background_colour, command=self.parameters_menu,
+                                              state="disabled")
         self.sidebar_button_3.grid(row=4, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
         self.sidebar_button_4 = ctk.CTkButton(self.sidebar_frame, border_color=self.un_active_button, text="Simulate",
                                               font=(self.font, self.button_font_size),
                                               border_width=self.button_border_width, height=self.button_height,
-                                              fg_color=self.background_colour, command=self.setup_chart, state="disabled")
+                                              fg_color=self.background_colour, command=self.setup_chart,
+                                              state="disabled")
         self.sidebar_button_4.grid(row=5, column=0, padx=self.button_padx, pady=self.button_pady, columnspan=2,
                                    sticky="nsew")
 
@@ -137,10 +138,10 @@ class App(ctk.CTk):
 
         self.segmented_button = ctk.CTkSegmentedButton(self.choice_frame, values=["One", "Two", "Three", "Four"],
                                                        height=40, width=100, selected_color=self.secondary_colour,
-                                                       font=(self.font, self.button_font_size - 6), command=self.set_buttons)
+                                                       font=(self.font, self.button_font_size - 6),
+                                                       command=self.set_buttons)
         self.segmented_button.grid(row=1, column=0, padx=5, pady=5, columnspan=1)
         self.segmented_button.set("One")
-
 
     def set_buttons(self, value):
         self.sidebar_button_2.configure(border_color=self.un_active_button, state="disabled")
@@ -189,16 +190,14 @@ class App(ctk.CTk):
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_exposure = self.slider_value_exposure[y].get()
-                s, e, i, r, ts = solver(x.get(), [num_of_s, num_of_e, num_of_i, num_of_r, num_of_beta, num_of_gamma, num_of_exposure])
+                s, e, i, r, ts = solver(x.get(), [num_of_s, num_of_e, num_of_i, num_of_r, num_of_beta, num_of_gamma,
+                                                  num_of_exposure])
                 ax.plot(ts, s)
                 ax.plot(ts, e)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
 
             y += 1
-
-
-
 
         ax.grid(visible=True)
         canvas = FigureCanvasTkAgg(figure=fig, master=self.sidebar_frame2)
@@ -218,7 +217,7 @@ class App(ctk.CTk):
 
     def model_menu(self):
 
-        self.sidebar_button_2.configure(border_color=self.secondary_colour, state= "normal")
+        self.sidebar_button_2.configure(border_color=self.secondary_colour, state="normal")
 
         self.remove_model_menu()
         self.menu_present = True
@@ -289,10 +288,11 @@ class App(ctk.CTk):
         self.remove_model_menu()
         self.menu_present = True
 
-        self.sidebar_button_3.configure(border_color=self.secondary_colour, state= "normal")
+        self.sidebar_button_3.configure(border_color=self.secondary_colour, state="normal")
 
         if self.number_of_charts() == 4 or self.number_of_charts() == 3:
-            self.sidebar_frame3 = ctk.CTkScrollableFrame(self, width=180, corner_radius=10, fg_color=self.background_colour)
+            self.sidebar_frame3 = ctk.CTkScrollableFrame(self, width=180, corner_radius=10,
+                                                         fg_color=self.background_colour)
             self.sidebar_frame3.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="nsew", padx=10, pady=20)
             self.sidebar_frame3.grid_rowconfigure((1, 2, 3, 4, 5, 6, 7, 8), weight=1)
         else:
@@ -326,80 +326,67 @@ class App(ctk.CTk):
                 self.types_of_detail[i].grid(row=i + 1, column=0, padx=5, pady=5, sticky="ew")
 
             if len(self.checkbox_values) != 0:
-                self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Model " + str(i + 1) + " (" + str(self.checkbox_values[i].get()) + ")",
-                                              font=ctk.CTkFont(self.font, size=20, weight="bold"))
+                self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Model " + str(i + 1) + " ("
+                                                                             + str(self.checkbox_values[i].get()) + ")",
+                                               font=ctk.CTkFont(self.font, size=20, weight="bold"))
                 self.logo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
             else:
                 self.logo_label = ctk.CTkLabel(self.types_of_detail[i], text="Model " + str(i + 1),
-                                                font=ctk.CTkFont(self.font, size=20, weight="bold"))
+                                               font=ctk.CTkFont(self.font, size=20, weight="bold"))
                 self.logo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
 
             self.checkbox_birthrates_value.append(ctk.StringVar(value="No"))
             self.checkbox_birthrates = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Add Birth Rates",
-                                                              onvalue="Birth Rates", offvalue="No",
-                                                              variable=self.checkbox_birthrates_value[i],
-                                                              width=25, fg_color=self.secondary_colour,
-                                                              font=ctk.CTkFont(self.font, size=12, weight="bold"))
+                                                       onvalue="Birth Rates", offvalue="No",
+                                                       variable=self.checkbox_birthrates_value[i], width=25,
+                                                       fg_color=self.secondary_colour,
+                                                       font=ctk.CTkFont(self.font, size=12, weight="bold"))
             self.checkbox_birthrates.grid(row=1, column=0, padx=self.button_padding, pady=self.button_padding,
-                                              columnspan=1, sticky="nsew")
+                                          columnspan=1, sticky="nsew")
 
             self.checkbox_treatment_value.append(ctk.StringVar(value="No"))
-            self.checkbox_quarantine = ctk.CTkRadioButton(master=self.types_of_detail[i],
-                                                                     text="Quarantine",
-                                                                     value="Quarantine",
-                                                                     variable=self.checkbox_treatment_value[i],
-                                                                     width=25, fg_color=self.secondary_colour,
-                                                                     font=ctk.CTkFont(self.font, size=12,
-                                                                                      weight="bold"))
-            self.checkbox_quarantine.grid(row=2, column=0, padx=self.button_padding,
-                                                     pady=self.button_padding, columnspan=1, sticky="nsew")
+            self.checkbox_quarantine = ctk.CTkRadioButton(master=self.types_of_detail[i], text="Quarantine",
+                                                          value="Quarantine", variable=self.checkbox_treatment_value[i],
+                                                          width=25, fg_color=self.secondary_colour,
+                                                          font=ctk.CTkFont(self.font, size=12, weight="bold"))
+            self.checkbox_quarantine.grid(row=2, column=0, padx=self.button_padding, pady=self.button_padding,
+                                          columnspan=1, sticky="nsew")
 
             self.checkbox_treatment_value.append(ctk.StringVar(value="No"))
-            self.checkbox_treatment_model = ctk.CTkRadioButton(master=self.types_of_detail[i],
-                                                            text="Treatment Model",
-                                                            value="Treatment Model",
-                                                            variable=self.checkbox_treatment_value[i],
-                                                            width=25, fg_color=self.secondary_colour,
-                                                            font=ctk.CTkFont(self.font, size=12,
-                                                                             weight="bold"))
+            self.checkbox_treatment_model = ctk.CTkRadioButton(master=self.types_of_detail[i], text="Treatment Model",
+                                                               value="Treatment Model",
+                                                               variable=self.checkbox_treatment_value[i], width=25,
+                                                               fg_color=self.secondary_colour,
+                                                               font=ctk.CTkFont(self.font, size=12, weight="bold"))
             self.checkbox_treatment_model.grid(row=3, column=0, padx=self.button_padding,
                                                pady=self.button_padding, columnspan=1, sticky="nsew")
 
             self.checkbox_maternal_immunity_value.append(ctk.StringVar(value="No"))
-            self.checkbox_maternal_immunity = ctk.CTkCheckBox(master=self.types_of_detail[i],
-                                                       text="Maternal Immunity",
-                                                       onvalue="Maternal Immunity", offvalue="No",
-                                                       variable=self.checkbox_maternal_immunity_value[i],
-                                                       width=25, fg_color=self.secondary_colour,
-                                                       font=ctk.CTkFont(self.font, size=12,
-                                                                        weight="bold"))
-            self.checkbox_maternal_immunity.grid(row=4, column=0, padx=self.button_padding,
-                                          pady=self.button_padding, columnspan=1, sticky="nsew")
+            self.checkbox_maternal_immunity = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Maternal Immunity",
+                                                              onvalue="Maternal Immunity", offvalue="No",
+                                                              variable=self.checkbox_maternal_immunity_value[i],
+                                                              width=25, fg_color=self.secondary_colour,
+                                                              font=ctk.CTkFont(self.font, size=12, weight="bold"))
+            self.checkbox_maternal_immunity.grid(row=4, column=0, padx=self.button_padding, pady=self.button_padding,
+                                                 columnspan=1, sticky="nsew")
 
             self.checkbox_deaths_value.append(ctk.StringVar(value="No"))
-            self.checkbox_deaths = ctk.CTkCheckBox(master=self.types_of_detail[i],
-                                                              text="Deaths from Disease Rate",
-                                                              onvalue="Deaths", offvalue="No",
-                                                              variable=self.checkbox_deaths_value[i],
-                                                              width=25, fg_color=self.secondary_colour,
-                                                              font=ctk.CTkFont(self.font, size=12,
-                                                                               weight="bold"))
-            self.checkbox_deaths.grid(row=5, column=0, padx=self.button_padding,
-                                                 pady=self.button_padding, columnspan=1, sticky="nsew")
+            self.checkbox_deaths = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Deaths from Disease Rate",
+                                                   onvalue="Deaths", offvalue="No",
+                                                   variable=self.checkbox_deaths_value[i], width=25,
+                                                   fg_color=self.secondary_colour,
+                                                   font=ctk.CTkFont(self.font, size=12, weight="bold"))
+            self.checkbox_deaths.grid(row=5, column=0, padx=self.button_padding, pady=self.button_padding, columnspan=1,
+                                      sticky="nsew")
 
             self.checkbox_seasonal_forcing_value.append(ctk.StringVar(value="No"))
-            self.checkbox_seasonal_forcing = ctk.CTkCheckBox(master=self.types_of_detail[i],
-                                                   text="Seasonal Forcing",
-                                                   onvalue="Seasonal Forcing", offvalue="No",
-                                                   variable=self.checkbox_seasonal_forcing_value[i],
-                                                   width=25, fg_color=self.secondary_colour,
-                                                   font=ctk.CTkFont(self.font, size=12,
-                                                                    weight="bold"))
-            self.checkbox_seasonal_forcing.grid(row=6, column=0, padx=self.button_padding,
-                                      pady=self.button_padding, columnspan=1, sticky="nsew")
-
-
-
+            self.checkbox_seasonal_forcing = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Seasonal Forcing",
+                                                             onvalue="Seasonal Forcing", offvalue="No",
+                                                             variable=self.checkbox_seasonal_forcing_value[i],
+                                                             width=25, fg_color=self.secondary_colour,
+                                                             font=ctk.CTkFont(self.font, size=12, weight="bold"))
+            self.checkbox_seasonal_forcing.grid(row=6, column=0, padx=self.button_padding, pady=self.button_padding,
+                                                columnspan=1, sticky="nsew")
 
             i += 1
 
@@ -509,7 +496,8 @@ class App(ctk.CTk):
                     self.slider_value_birthrates.append("No")
 
                 if self.checkbox_maternal_immunity_value[i].get() == "Maternal Immunity":
-                    self.create_slider(self.slider_value_maternal_immunity_loss, "Rate of Maternal Immunity Loss", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_maternal_immunity_loss, "Rate of Maternal Immunity Loss", i,
+                                       50, 1, 1000)
                 else:
                     self.slider_value_maternal_immunity_loss.append("No")
 
@@ -519,28 +507,34 @@ class App(ctk.CTk):
                     self.slider_value_death_rate.append("No")
 
                 if self.checkbox_seasonal_forcing_value[i].get() == "Seasonal Forcing":
-                    self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", i,
+                                       50, 1, 1000)
                 else:
                     self.slider_value_seasonal_forcing_severity.append("No")
 
                 if self.checkbox_treatment_value[i].get() == "Treatment Model":
                     self.number_of_sliders += 1
-                    self.label = ctk.CTkLabel(self.types_of_detail[i], text="Treatment Model Parameters", font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew", padx=5, pady=5)
+                    self.label = ctk.CTkLabel(self.types_of_detail[i], text="Treatment Model Parameters",
+                                              font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
+                                    padx=5, pady=5)
 
                     self.create_slider(self.slider_value_num_in_treatment, "Number in Treatment", i, 50, 1, 1000)
-                    self.create_slider(self.slider_value_reduced_infect_treatment, "Reduced Infectivity from Treatment", i, 50, 1, 1000)
-                    self.create_slider(self.slider_value_selected_treatment, "Fraction selected for Treatment", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_reduced_infect_treatment, "Reduced Infectivity from Treatment",
+                                       i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_selected_treatment, "Fraction selected for Treatment", i,
+                                       50, 1, 1000)
 
                 if self.checkbox_treatment_value[i].get() == "Quarantine":
                     self.number_of_sliders += 1
-                    self.label = ctk.CTkLabel(self.types_of_detail[i], text="Quarantine Parameters", font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew", padx=5, pady=5)
+                    self.label = ctk.CTkLabel(self.types_of_detail[i], text="Quarantine Parameters",
+                                              font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
+                                    padx=5, pady=5)
 
                     self.create_slider(self.slider_value_quarantined, "Number in Quarantine", i, 50, 1, 1000)
                     self.create_slider(self.slider_value_isolated, "Number isolated", i, 50, 1, 1000)
             i += 1
-
 
     def create_slider(self, array, text, i, start_value, bottom, top):
 
@@ -560,7 +554,7 @@ class App(ctk.CTk):
 
     def remove_model_menu(self):
 
-        if (self.menu_present):
+        if self.menu_present:
             self.sidebar_frame3.grid_remove()
 
 
