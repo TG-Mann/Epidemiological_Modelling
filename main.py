@@ -465,10 +465,10 @@ class App(ctk.CTk):
                     or self.checkbox_values[i].get() == "SEIR"):
 
                 # label and slider for time
-                self.create_slider(self.slider_value_time, "Time", i, 50, 1, 1000)
+                self.create_slider(self.slider_value_time, "Time", i, 60, 60, 1000)
 
                 # label and slider for susceptible
-                self.create_slider(self.slider_value_susceptible, "Number of Susceptible", i,  1500, 1, 2000)
+                self.create_slider(self.slider_value_susceptible, "Number of Susceptible", i,  1500, 500, 4000)
 
                 # label and slider for Infected
                 self.create_slider(self.slider_value_infected, "Number of Infected", i, 1, 1, 1000)
@@ -484,10 +484,10 @@ class App(ctk.CTk):
                 if self.checkbox_values[i].get() == "SEIR":
 
                     # label and slider for Exposed
-                    self.create_slider(self.slider_value_exposed, "Number of Exposed", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_exposed, "Number of Exposed", i, 1, 1, 100)
 
                     # label and slider for Exposure
-                    self.create_slider(self.slider_value_exposure, "Exposure Rate", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_exposure, "Exposure Rate", i, 50, 1, 100)
 
                 else:
                     self.slider_value_exposed.append("No")
@@ -495,10 +495,10 @@ class App(ctk.CTk):
 
 
                 # label and slider for transmission rate
-                self.create_slider(self.slider_value_transmission, "Transmission Rate (Beta)", i, 0.0005, 0.0005, 1)
+                self.create_slider(self.slider_value_transmission, "Transmission Rate (Beta)", i, 0.0005, 0.00001, 0.001)
 
                 # label and slider for recovery rate
-                self.create_slider(self.slider_value_recovery, "Recovery Rate (Gamma)", i, 0.1, 0.1, 10)
+                self.create_slider(self.slider_value_recovery, "Recovery Rate (Gamma)", i, 0.1, 0.01, 1)
 
                 if self.checkbox_birthrates_value[i].get() == "Birth Rates":
                     self.create_slider(self.slider_value_birthrates, "Birth / Death rate", i, 0.05, 0, 0.1)
@@ -544,6 +544,7 @@ class App(ctk.CTk):
 
                     self.create_slider(self.slider_value_quarantined, "Number in Quarantine", i, 50, 1, 1000)
                     self.create_slider(self.slider_value_isolated, "Number isolated", i, 50, 1, 1000)
+
             i += 1
 
     def create_slider(self, array, text, i, start_value, bottom, top):
