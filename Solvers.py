@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy.integrate import odeint
 
+
 s = 1500.0
 e = 1.0
 i = 1.0
@@ -9,6 +10,7 @@ r = 0.0
 beta = 0.0005
 gamma = 0.1
 exposure = 0.2
+birth_rate = 0
 time = 60.0
 deltat = 0.0001
 sValues = [s]
@@ -77,39 +79,42 @@ def createGraph(methodHasRan):
 
 
 def SIR(Values, t):
+    #if birth set to value
+    #else birth set to 0
 
-    return [-beta * Values[0] * Values[1],
-            beta * Values[0] * Values[1] - gamma * Values[1],
-            gamma * Values[1]]
+    return [-beta * Values[0] * Values[1] + birth_rate * (Values[0] + Values[1] + Values[0]),
+            beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1],
+            gamma * Values[1] - birth_rate * Values[2]]
 
 def SIS(Values, t):
 
-    return [-beta * Values[0] * Values[1] + gamma * Values[1],
-            beta * Values[0] * Values[1] - gamma * Values[1]]
+    return [-beta * Values[0] * Values[1] + gamma * Values[1] + birth_rate * (Values[0] + Values[1] + Values[0]),
+            beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1]]
 
 def SEIR(Values, t):
 
-    return [-beta * Values[0] * Values[2],
-            beta * Values[0] * Values[2] - exposure * Values[1],
-            exposure * Values[1] - gamma * Values[2],
-            gamma * Values[2]]
-
-def setbeta(value):
-    beta = value
+    return [-beta * Values[0] * Values[2] + birth_rate * (Values[0] + Values[1] + Values[0]),
+            beta * Values[0] * Values[2] - exposure * Values[1] - birth_rate * Values[1],
+            exposure * Values[1] - gamma * Values[2] - birth_rate * Values[2],
+            gamma * Values[2] - birth_rate * Values[3]]
 
 def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
     global beta
     global gamma
     global exposure
+    global birth_rate
+
+    # either 0 if not selected or slider value if selected
+    birth_rate = parameters["births"]
 
     if chart_type == "SIR":
 
-        s = parameters[0]
-        i = parameters[1]
-        r = parameters[2]
-        beta = parameters[3]
-        gamma = parameters[4]
+        s = parameters["susceptible"]
+        i = parameters["infected"]
+        r = parameters["recovered"]
+        beta = parameters["beta"]
+        gamma = parameters["gamma"]
 
         Us = odeint(SIR, [s, i, r], ts)
 
@@ -119,12 +124,12 @@ def solver(chart_type, parameters):
 
     if chart_type == "SIS":
         
-        s = parameters[0]
-        i = parameters[1]
+        s = parameters["susceptible"]
+        i = parameters["infected"]
 
-        beta = parameters[2]
+        beta = parameters["beta"]
 
-        gamma = parameters[3]
+        gamma = parameters["gamma"]
 
         Us = odeint(SIS, [s, i], ts)
 
@@ -134,13 +139,13 @@ def solver(chart_type, parameters):
 
     if chart_type == "SEIR":
 
-        s = parameters[0]
-        e = parameters[1]
-        i = parameters[2]
-        r = parameters[3]
-        beta = parameters[4]
-        gamma = parameters[5]
-        exposure = parameters[6]
+        s = parameters["susceptible"]
+        e = parameters["exposed"]
+        i = parameters["infected"]
+        r = parameters["recovered"]
+        beta = parameters["beta"]
+        gamma = parameters["gamma"]
+        exposure = parameters["exposure"]
 
         Us = odeint(SEIR, [s, e, i, r], ts)
 

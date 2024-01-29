@@ -165,8 +165,10 @@ class App(ctk.CTk):
                 num_of_r = self.slider_value_recovered[y].get()
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
+                num_of_birth = self.find_birth_rate(y)
 
-                s, i, r, ts = solver(x.get(), [num_of_s, num_of_i, num_of_r, num_of_beta, num_of_gamma])
+                s, i, r, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
+                                               "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
@@ -177,7 +179,8 @@ class App(ctk.CTk):
                 num_of_i = self.slider_value_infected[y].get()
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
-                s, i, ts = solver(x.get(), [num_of_s, num_of_i, num_of_beta, num_of_gamma])
+                num_of_birth = self.find_birth_rate(y)
+                s, i, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
 
@@ -190,8 +193,9 @@ class App(ctk.CTk):
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_exposure = self.slider_value_exposure[y].get()
-                s, e, i, r, ts = solver(x.get(), [num_of_s, num_of_e, num_of_i, num_of_r, num_of_beta, num_of_gamma,
-                                                  num_of_exposure])
+                num_of_birth = self.find_birth_rate(y)
+                s, e, i, r, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
+                                                  "gamma": num_of_gamma, "exposure": num_of_exposure, "births": num_of_birth})
                 ax.plot(ts, s)
                 ax.plot(ts, e)
                 ax.plot(ts, i)
@@ -204,6 +208,12 @@ class App(ctk.CTk):
         canvas.draw()
         canvas.get_tk_widget().place(x=10, y=10)
 
+    def find_birth_rate(self, y):
+        if self.checkbox_birthrates_value[y].get() == "Birth Rates":
+
+            return self.slider_value_birthrates[y].get()
+        else:
+            return 0
     def number_of_charts(self):
         # finding number of charts
         if (self.segmented_button.get()) == "Two":
@@ -491,7 +501,7 @@ class App(ctk.CTk):
                 self.create_slider(self.slider_value_recovery, "Recovery Rate (Gamma)", i, 0.1, 0.1, 10)
 
                 if self.checkbox_birthrates_value[i].get() == "Birth Rates":
-                    self.create_slider(self.slider_value_birthrates, "Birth rate", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_birthrates, "Birth / Death rate", i, 0.05, 0, 0.1)
                 else:
                     self.slider_value_birthrates.append("No")
 
