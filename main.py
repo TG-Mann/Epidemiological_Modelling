@@ -228,6 +228,8 @@ class App(ctk.CTk):
     def model_menu(self):
 
         self.sidebar_button_2.configure(border_color=self.secondary_colour, state="normal")
+        self.sidebar_button_3.configure(border_color=self.un_active_button, state="disabled")
+        self.sidebar_button_4.configure(border_color=self.un_active_button, state="disabled")
 
         self.remove_model_menu()
         self.menu_present = True
@@ -299,6 +301,7 @@ class App(ctk.CTk):
         self.menu_present = True
 
         self.sidebar_button_3.configure(border_color=self.secondary_colour, state="normal")
+        self.sidebar_button_4.configure(border_color=self.un_active_button, state="disabled")
 
         if self.number_of_charts() == 4 or self.number_of_charts() == 3:
             self.sidebar_frame3 = ctk.CTkScrollableFrame(self, width=180, corner_radius=10,
