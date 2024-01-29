@@ -4,6 +4,7 @@ import customtkinter as ctk
 from matplotlib.figure import Figure
 from Solvers import solver
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import numpy as np
 
 ctk.set_appearance_mode("dark")
 
@@ -148,40 +149,44 @@ class App(ctk.CTk):
 
     def setup_chart(self):
 
-        #print(self.slider_value_maternal_immunity_loss[0])
-        #print(self.slider_value_maternal_immunity_loss[1].get())
-        #print(self.slider_value_maternal_immunity_loss[2])
-
-
-
-
         fig = Figure(figsize=(7, 7), facecolor=self.background_colour, alpha=0.9)
         ax = fig.add_subplot()
         ax.set_facecolor(self.background_colour)
         ax.set_alpha(0.9)
-
-        number_of_models = self.number_of_charts()
+        plot_values = []
+        y = 0
         for x in self.checkbox_values:
 
             if x.get() == "SIR":
 
-                s, i, r, ts = solver(x.get())
+                num_of_s = self.slider_value_susceptible[y].get()
+                num_of_i = self.slider_value_infected[y].get()
+                num_of_r = self.slider_value_recovered[y].get()
+                num_of_beta = self.slider_value_transmission[y].get()
+                num_of_gamma = self.slider_value_recovery[y].get()
+
+                s, i, r, ts = solver(x.get(), [num_of_s, num_of_i, num_of_r, num_of_beta, num_of_gamma])
+                plot_values.append([s, i, r, ts])
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
 
             if x.get() == "SIS":
 
-                s, i, ts = solver(x.get())
+                s, i, ts = solver(x.get(), [])
                 ax.plot(ts, s)
                 ax.plot(ts, i)
 
             if x.get() == "SEIR":
-                s, e, i, r, ts = solver(x.get())
+                s, e, i, r, ts = solver(x.get(), [])
                 ax.plot(ts, s)
                 ax.plot(ts, e)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
+
+            y += 1
+
+
 
 
         ax.grid(visible=True)
@@ -452,18 +457,18 @@ class App(ctk.CTk):
                     or self.checkbox_values[i].get() == "SEIR"):
 
                 # label and slider for time
-                self.create_slider(self.slider_value_time, "Time", i)
+                self.create_slider(self.slider_value_time, "Time", i, 50, 1, 1000)
 
                 # label and slider for susceptible
-                self.create_slider(self.slider_value_susceptible, "Number of Susceptible", i)
+                self.create_slider(self.slider_value_susceptible, "Number of Susceptible", i,  1500, 1, 2000)
 
                 # label and slider for Infected
-                self.create_slider(self.slider_value_infected, "Number of Infected", i)
+                self.create_slider(self.slider_value_infected, "Number of Infected", i, 1, 1, 1000)
 
                 # label and slider for Recovered
                 if self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SEIR":
 
-                    self.create_slider(self.slider_value_recovered, "Number of Recovered", i)
+                    self.create_slider(self.slider_value_recovered, "Number of Recovered", i, 0, 0, 1000)
                 else:
                     self.slider_value_recovered.append("No")
 
@@ -471,10 +476,10 @@ class App(ctk.CTk):
                 if self.checkbox_values[i].get() == "SEIR":
 
                     # label and slider for Exposed
-                    self.create_slider(self.slider_value_exposed, "Number of Exposed", i)
+                    self.create_slider(self.slider_value_exposed, "Number of Exposed", i, 50, 1, 1000)
 
                     # label and slider for Exposure
-                    self.create_slider(self.slider_value_exposure, "Exposure Rate", i)
+                    self.create_slider(self.slider_value_exposure, "Exposure Rate", i, 50, 1, 1000)
 
                 else:
                     self.slider_value_exposed.append("No")
@@ -482,28 +487,28 @@ class App(ctk.CTk):
 
 
                 # label and slider for transmission rate
-                self.create_slider(self.slider_value_transmission, "Transmission Rate (Beta)", i)
+                self.create_slider(self.slider_value_transmission, "Transmission Rate (Beta)", i, 0.0005, 0.0005, 1)
 
                 # label and slider for recovery rate
-                self.create_slider(self.slider_value_recovery, "Recovery Rate (Gamma)", i)
+                self.create_slider(self.slider_value_recovery, "Recovery Rate (Gamma)", i, 0.1, 0.1, 10)
 
                 if self.checkbox_birthrates_value[i].get() == "Birth Rates":
-                    self.create_slider(self.slider_value_birthrates, "Birth rate", i)
+                    self.create_slider(self.slider_value_birthrates, "Birth rate", i, 50, 1, 1000)
                 else:
                     self.slider_value_birthrates.append("No")
 
                 if self.checkbox_maternal_immunity_value[i].get() == "Maternal Immunity":
-                    self.create_slider(self.slider_value_maternal_immunity_loss, "Rate of Maternal Immunity Loss", i)
+                    self.create_slider(self.slider_value_maternal_immunity_loss, "Rate of Maternal Immunity Loss", i, 50, 1, 1000)
                 else:
                     self.slider_value_maternal_immunity_loss.append("No")
 
                 if self.checkbox_deaths_value[i].get() == "Deaths":
-                    self.create_slider(self.slider_value_death_rate, "Rate of Deaths from Disease", i)
+                    self.create_slider(self.slider_value_death_rate, "Rate of Deaths from Disease", i, 50, 1, 1000)
                 else:
                     self.slider_value_death_rate.append("No")
 
                 if self.checkbox_seasonal_forcing_value[i].get() == "Seasonal Forcing":
-                    self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", i)
+                    self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", i, 50, 1, 1000)
                 else:
                     self.slider_value_seasonal_forcing_severity.append("No")
 
@@ -512,21 +517,21 @@ class App(ctk.CTk):
                     self.label = ctk.CTkLabel(self.types_of_detail[i], text="Treatment Model Parameters", font=ctk.CTkFont(self.font, size=14, weight="bold"))
                     self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew", padx=5, pady=5)
 
-                    self.create_slider(self.slider_value_num_in_treatment, "Number in Treatment", i)
-                    self.create_slider(self.slider_value_reduced_infect_treatment, "Reduced Infectivity from Treatment", i)
-                    self.create_slider(self.slider_value_selected_treatment, "Fraction selected for Treatment", i)
+                    self.create_slider(self.slider_value_num_in_treatment, "Number in Treatment", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_reduced_infect_treatment, "Reduced Infectivity from Treatment", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_selected_treatment, "Fraction selected for Treatment", i, 50, 1, 1000)
 
                 if self.checkbox_treatment_value[i].get() == "Quarantine":
                     self.number_of_sliders += 1
                     self.label = ctk.CTkLabel(self.types_of_detail[i], text="Quarantine Parameters", font=ctk.CTkFont(self.font, size=14, weight="bold"))
                     self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew", padx=5, pady=5)
 
-                    self.create_slider(self.slider_value_quarantined, "Number in Quarantine", i)
-                    self.create_slider(self.slider_value_isolated, "Number isolated", i)
+                    self.create_slider(self.slider_value_quarantined, "Number in Quarantine", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_isolated, "Number isolated", i, 50, 1, 1000)
             i += 1
 
 
-    def create_slider(self, array, text, i):
+    def create_slider(self, array, text, i, start_value, bottom, top):
 
         # label and slider for parameters menu
         self.number_of_sliders += 1
@@ -536,9 +541,9 @@ class App(ctk.CTk):
         self.label = ctk.CTkLabel(self.container, text=text, font=ctk.CTkFont(self.font, size=12, weight="bold"))
         self.label.grid(row=0, column=0, padx=3, pady=3, columnspan=2, sticky="nsew")
         self.number_of_sliders += 1
-        array.append(ctk.IntVar(value=50))
+        array.append(ctk.DoubleVar(value=start_value))
 
-        self.slider = ctk.CTkSlider(self.container, from_=1, to=10000, variable=array[i])
+        self.slider = ctk.CTkSlider(self.container, from_=bottom, to=top, variable=array[i])
         self.slider.grid(row=1, column=0, padx=5, pady=5, columnspan=2,
                                   sticky="nsew")
 

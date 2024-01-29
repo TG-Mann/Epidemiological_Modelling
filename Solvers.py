@@ -95,11 +95,26 @@ def SEIR(Values, t):
             k * Values[1] - gamma * Values[2],
             gamma * Values[2]]
 
+def setbeta(value):
+    beta = value
 
-def solver(chart_type):
+def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
 
     if chart_type == "SIR":
+
+        s = parameters[0]
+        print(s)
+        i = parameters[1]
+        print(i)
+        r = parameters[2]
+        print(r)
+        global beta
+        beta = parameters[3]
+        print(beta)
+        global gamma
+        gamma = parameters[4]
+        print(gamma)
 
         Us = odeint(SIR, [s, i, r], ts)
 
