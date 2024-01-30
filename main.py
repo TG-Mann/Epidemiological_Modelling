@@ -167,7 +167,6 @@ class App(ctk.CTk):
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
-                print(num_of_deaths)
                 s, i, r, d, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
                                                "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
                                                "deaths_from_disease": num_of_deaths})
@@ -184,9 +183,13 @@ class App(ctk.CTk):
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_birth = self.find_birth_rate(y)
-                s, i, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth})
+                num_of_deaths = self.find_death_rate(y)
+                s, i, d, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
+                                            "deaths_from_disease": num_of_deaths})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
+                if self.checkbox_deaths_value[y].get() == "Deaths":
+                    ax.plot(ts, d)
 
             if x.get() == "SEIR":
 
@@ -198,12 +201,16 @@ class App(ctk.CTk):
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_exposure = self.slider_value_exposure[y].get()
                 num_of_birth = self.find_birth_rate(y)
-                s, e, i, r, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
-                                                  "gamma": num_of_gamma, "exposure": num_of_exposure, "births": num_of_birth})
+                num_of_deaths = self.find_death_rate(y)
+                s, e, i, r, d, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
+                                                  "gamma": num_of_gamma, "exposure": num_of_exposure, "births": num_of_birth,
+                                                  "deaths_from_disease": num_of_deaths})
                 ax.plot(ts, s)
                 ax.plot(ts, e)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
+                if self.checkbox_deaths_value[y].get() == "Deaths":
+                    ax.plot(ts, d)
 
             y += 1
 

@@ -90,15 +90,17 @@ def SIR(Values, t):
 
 def SIS(Values, t):
 
-    return [-beta * Values[0] * Values[1] + gamma * Values[1] + birth_rate * (Values[0] + Values[1] + Values[0]),
-            beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1]]
+    return [-beta * Values[0] * Values[1] + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]),
+            beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1],
+            death_rate * (gamma * Values[1])]
 
 def SEIR(Values, t):
 
     return [-beta * Values[0] * Values[2] + birth_rate * (Values[0] + Values[1] + Values[0]),
             beta * Values[0] * Values[2] - exposure * Values[1] - birth_rate * Values[1],
             exposure * Values[1] - gamma * Values[2] - birth_rate * Values[2],
-            gamma * Values[2] - birth_rate * Values[3]]
+            (1 - death_rate) * (gamma * Values[2]) - birth_rate * Values[3],
+            death_rate * (gamma * Values[2])]
 
 def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
@@ -111,15 +113,15 @@ def solver(chart_type, parameters):
     # either 0 if not selected or slider value if selected
     birth_rate = parameters["births"]
     death_rate = parameters["deaths_from_disease"]
+    d = 0
+    s = parameters["susceptible"]
+    i = parameters["infected"]
+    beta = parameters["beta"]
+    gamma = parameters["gamma"]
 
     if chart_type == "SIR":
 
-        s = parameters["susceptible"]
-        i = parameters["infected"]
         r = parameters["recovered"]
-        d = 0
-        beta = parameters["beta"]
-        gamma = parameters["gamma"]
 
         Us = odeint(SIR, [s, i, r, d], ts)
 
@@ -128,35 +130,24 @@ def solver(chart_type, parameters):
         return [S,I,R,D,ts]
 
     if chart_type == "SIS":
-        
-        s = parameters["susceptible"]
-        i = parameters["infected"]
 
-        beta = parameters["beta"]
+        Us = odeint(SIS, [s, i, d], ts)
 
-        gamma = parameters["gamma"]
+        S, I, D = Us[:, 0], Us[:, 1], Us[:, 2]
 
-        Us = odeint(SIS, [s, i], ts)
-
-        S, I = Us[:, 0], Us[:, 1]
-
-        return [S,I,ts]
+        return [S,I,D,ts]
 
     if chart_type == "SEIR":
 
-        s = parameters["susceptible"]
         e = parameters["exposed"]
-        i = parameters["infected"]
         r = parameters["recovered"]
-        beta = parameters["beta"]
-        gamma = parameters["gamma"]
         exposure = parameters["exposure"]
 
-        Us = odeint(SEIR, [s, e, i, r], ts)
+        Us = odeint(SEIR, [s, e, i, r, d], ts)
 
-        S, E, I, R = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3]
+        S, E, I, R, D = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4]
 
-        return [S,E,I,R,ts]
+        return [S,E,I,R,D,ts]
 
 
 
