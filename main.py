@@ -383,9 +383,14 @@ class App(ctk.CTk):
             self.checkbox_quarantine.grid(row=2, column=0, padx=self.button_padding, pady=self.button_padding,
                                           columnspan=1, sticky="nsew")
 
+            if self.checkbox_values[i].get() == "SIS":
+                self.button_status = "disabled"
+            else:
+                self.button_status = "normal"
+
             self.checkbox_treatment_value.append(ctk.StringVar(value="No"))
             self.checkbox_treatment_model = ctk.CTkRadioButton(master=self.types_of_detail[i], text="Treatment Model",
-                                                               value="Treatment Model",
+                                                               value="Treatment Model", state=self.button_status,
                                                                variable=self.checkbox_treatment_value[i], width=25,
                                                                fg_color=self.secondary_colour,
                                                                font=ctk.CTkFont(self.font, size=12, weight="bold"))
