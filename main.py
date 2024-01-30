@@ -166,12 +166,16 @@ class App(ctk.CTk):
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_birth = self.find_birth_rate(y)
-
-                s, i, r, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
-                                               "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth})
+                num_of_deaths = self.find_death_rate(y)
+                print(num_of_deaths)
+                s, i, r, d, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
+                                               "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
+                                               "deaths_from_disease": num_of_deaths})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
+                if self.checkbox_deaths_value[y].get() == "Deaths":
+                    ax.plot(ts, d)
 
             if x.get() == "SIS":
 
@@ -207,6 +211,13 @@ class App(ctk.CTk):
         canvas = FigureCanvasTkAgg(figure=fig, master=self.sidebar_frame2)
         canvas.draw()
         canvas.get_tk_widget().place(x=10, y=10)
+
+    def find_death_rate(self, y):
+        if self.checkbox_deaths_value[y].get() == "Deaths":
+
+            return self.slider_value_death_rate[y].get()
+        else:
+            return 0
 
     def find_birth_rate(self, y):
         if self.checkbox_birthrates_value[y].get() == "Birth Rates":
@@ -515,7 +526,7 @@ class App(ctk.CTk):
                     self.slider_value_maternal_immunity_loss.append("No")
 
                 if self.checkbox_deaths_value[i].get() == "Deaths":
-                    self.create_slider(self.slider_value_death_rate, "Rate of Deaths from Disease", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_death_rate, "Rate of Deaths from Disease", i, 0.2, 0, 1)
                 else:
                     self.slider_value_death_rate.append("No")
 

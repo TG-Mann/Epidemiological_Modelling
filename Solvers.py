@@ -11,6 +11,7 @@ beta = 0.0005
 gamma = 0.1
 exposure = 0.2
 birth_rate = 0
+death_rate = 0
 time = 60.0
 deltat = 0.0001
 sValues = [s]
@@ -84,7 +85,8 @@ def SIR(Values, t):
 
     return [-beta * Values[0] * Values[1] + birth_rate * (Values[0] + Values[1] + Values[0]),
             beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1],
-            gamma * Values[1] - birth_rate * Values[2]]
+            (1 - death_rate) * (gamma * Values[1]) - birth_rate * Values[2],
+            death_rate * (gamma * Values[1])]
 
 def SIS(Values, t):
 
@@ -104,23 +106,26 @@ def solver(chart_type, parameters):
     global gamma
     global exposure
     global birth_rate
+    global death_rate
 
     # either 0 if not selected or slider value if selected
     birth_rate = parameters["births"]
+    death_rate = parameters["deaths_from_disease"]
 
     if chart_type == "SIR":
 
         s = parameters["susceptible"]
         i = parameters["infected"]
         r = parameters["recovered"]
+        d = 0
         beta = parameters["beta"]
         gamma = parameters["gamma"]
 
-        Us = odeint(SIR, [s, i, r], ts)
+        Us = odeint(SIR, [s, i, r, d], ts)
 
-        S, I, R = Us[:, 0], Us[:, 1], Us[:, 2]
+        S, I, R, D = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3]
 
-        return [S,I,R,ts]
+        return [S,I,R,D,ts]
 
     if chart_type == "SIS":
         
