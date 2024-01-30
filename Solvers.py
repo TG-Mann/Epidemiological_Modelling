@@ -12,6 +12,7 @@ gamma = 0.1
 exposure = 0.2
 birth_rate = 0
 death_rate = 0
+vaccination_rate = 0
 time = 60.0
 deltat = 0.0001
 sValues = [s]
@@ -83,24 +84,27 @@ def SIR(Values, t):
     #if birth set to value
     #else birth set to 0
 
-    return [-beta * Values[0] * Values[1] + birth_rate * (Values[0] + Values[1] + Values[0]),
+    return [-beta * Values[0] * Values[1] + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
             beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1],
             (1 - death_rate) * (gamma * Values[1]) - birth_rate * Values[2],
-            death_rate * (gamma * Values[1])]
+            death_rate * (gamma * Values[1]),
+            vaccination_rate * Values[0]]
 
 def SIS(Values, t):
 
-    return [-beta * Values[0] * Values[1] + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]),
+    return [-beta * Values[0] * Values[1] + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
             beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1],
-            death_rate * (gamma * Values[1])]
+            death_rate * (gamma * Values[1]),
+            vaccination_rate * Values[0]]
 
 def SEIR(Values, t):
 
-    return [-beta * Values[0] * Values[2] + birth_rate * (Values[0] + Values[1] + Values[0]),
+    return [-beta * Values[0] * Values[2] + birth_rate * (Values[0] + Values[1] + Values[0] - vaccination_rate * Values[0]),
             beta * Values[0] * Values[2] - exposure * Values[1] - birth_rate * Values[1],
             exposure * Values[1] - gamma * Values[2] - birth_rate * Values[2],
             (1 - death_rate) * (gamma * Values[2]) - birth_rate * Values[3],
-            death_rate * (gamma * Values[2])]
+            death_rate * (gamma * Values[2]),
+            vaccination_rate * Values[0]]
 
 def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
@@ -109,11 +113,14 @@ def solver(chart_type, parameters):
     global exposure
     global birth_rate
     global death_rate
+    global vaccination_rate
 
     # either 0 if not selected or slider value if selected
     birth_rate = parameters["births"]
     death_rate = parameters["deaths_from_disease"]
+    vaccination_rate = parameters["vaccinated"]
     d = 0
+    v = 0
     s = parameters["susceptible"]
     i = parameters["infected"]
     beta = parameters["beta"]
@@ -123,19 +130,19 @@ def solver(chart_type, parameters):
 
         r = parameters["recovered"]
 
-        Us = odeint(SIR, [s, i, r, d], ts)
+        Us = odeint(SIR, [s, i, r, d, v], ts)
 
-        S, I, R, D = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3]
+        S, I, R, D, V = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4]
 
-        return [S,I,R,D,ts]
+        return [S,I,R,D,V,ts]
 
     if chart_type == "SIS":
 
-        Us = odeint(SIS, [s, i, d], ts)
+        Us = odeint(SIS, [s, i, d, v], ts)
 
-        S, I, D = Us[:, 0], Us[:, 1], Us[:, 2]
+        S, I, D, V = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3]
 
-        return [S,I,D,ts]
+        return [S,I,D,V,ts]
 
     if chart_type == "SEIR":
 
@@ -143,11 +150,11 @@ def solver(chart_type, parameters):
         r = parameters["recovered"]
         exposure = parameters["exposure"]
 
-        Us = odeint(SEIR, [s, e, i, r, d], ts)
+        Us = odeint(SEIR, [s, e, i, r, d, v], ts)
 
-        S, E, I, R, D = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4]
+        S, E, I, R, D, V = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5]
 
-        return [S,E,I,R,D,ts]
+        return [S,E,I,R,D,V,ts]
 
 
 

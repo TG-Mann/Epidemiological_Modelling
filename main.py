@@ -38,7 +38,7 @@ class App(ctk.CTk):
         # Detail Menu Parameters
         self.types_of_detail = []
         self.checkbox_birthrates_value = []
-        self.checkbox_maternal_immunity_value = []
+        self.checkbox_vaccination_value = []
         self.checkbox_deaths_value = []
         self.checkbox_treatment_value = []
         self.checkbox_seasonal_forcing_value = []
@@ -53,7 +53,7 @@ class App(ctk.CTk):
         self.slider_value_recovery = []
         self.slider_value_exposure = []
         self.slider_value_birthrates = []
-        self.slider_value_maternal_immunity_loss = []
+        self.slider_value_vaccination = []
         self.slider_value_death_rate = []
         self.slider_value_seasonal_forcing_severity = []
         self.slider_value_num_in_treatment = []
@@ -167,14 +167,17 @@ class App(ctk.CTk):
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
-                s, i, r, d, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
+                num_of_vac = self.find_vaccination_rate(y)
+                s, i, r, d, v, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
                                                "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
-                                               "deaths_from_disease": num_of_deaths})
+                                               "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
                 if self.checkbox_deaths_value[y].get() == "Deaths":
                     ax.plot(ts, d)
+                if self.checkbox_vaccination_value[y].get() == "Vaccinations":
+                    ax.plot(ts, v)
 
             if x.get() == "SIS":
 
@@ -184,12 +187,15 @@ class App(ctk.CTk):
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
-                s, i, d, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
-                                            "deaths_from_disease": num_of_deaths})
+                num_of_vac = self.find_vaccination_rate(y)
+                s, i, d, v, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
+                                            "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 if self.checkbox_deaths_value[y].get() == "Deaths":
                     ax.plot(ts, d)
+                if self.checkbox_vaccination_value[y].get() == "Vaccinations":
+                    ax.plot(ts, v)
 
             if x.get() == "SEIR":
 
@@ -202,15 +208,18 @@ class App(ctk.CTk):
                 num_of_exposure = self.slider_value_exposure[y].get()
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
-                s, e, i, r, d, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
+                num_of_vac = self.find_vaccination_rate(y)
+                s, e, i, r, d, v, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
                                                   "gamma": num_of_gamma, "exposure": num_of_exposure, "births": num_of_birth,
-                                                  "deaths_from_disease": num_of_deaths})
+                                                  "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac})
                 ax.plot(ts, s)
                 ax.plot(ts, e)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
                 if self.checkbox_deaths_value[y].get() == "Deaths":
                     ax.plot(ts, d)
+                if self.checkbox_vaccination_value[y].get() == "Vaccinations":
+                    ax.plot(ts, v)
 
             y += 1
 
@@ -223,6 +232,12 @@ class App(ctk.CTk):
         if self.checkbox_deaths_value[y].get() == "Deaths":
 
             return self.slider_value_death_rate[y].get()
+        else:
+            return 0
+
+    def find_vaccination_rate(self, y):
+        if self.checkbox_vaccination_value[y].get() == "Vaccinations":
+            return self.slider_value_vaccination[y].get()
         else:
             return 0
 
@@ -340,7 +355,7 @@ class App(ctk.CTk):
         self.types_of_detail = []
         self.checkbox_birthrates_value = []
         self.checkbox_treatment_value = []
-        self.checkbox_maternal_immunity_value = []
+        self.checkbox_vaccination_value = []
         self.checkbox_deaths_value = []
         self.checkbox_seasonal_forcing_value = []
 
@@ -397,13 +412,13 @@ class App(ctk.CTk):
             self.checkbox_treatment_model.grid(row=3, column=0, padx=self.button_padding,
                                                pady=self.button_padding, columnspan=1, sticky="nsew")
 
-            self.checkbox_maternal_immunity_value.append(ctk.StringVar(value="No"))
-            self.checkbox_maternal_immunity = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Maternal Immunity",
-                                                              onvalue="Maternal Immunity", offvalue="No",
-                                                              variable=self.checkbox_maternal_immunity_value[i],
+            self.checkbox_vaccination_value.append(ctk.StringVar(value="No"))
+            self.checkbox_vaccination = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Vaccination",
+                                                              onvalue="Vaccinations", offvalue="No",
+                                                              variable=self.checkbox_vaccination_value[i],
                                                               width=25, fg_color=self.secondary_colour,
                                                               font=ctk.CTkFont(self.font, size=12, weight="bold"))
-            self.checkbox_maternal_immunity.grid(row=4, column=0, padx=self.button_padding, pady=self.button_padding,
+            self.checkbox_vaccination.grid(row=4, column=0, padx=self.button_padding, pady=self.button_padding,
                                                  columnspan=1, sticky="nsew")
 
             self.checkbox_deaths_value.append(ctk.StringVar(value="No"))
@@ -453,7 +468,7 @@ class App(ctk.CTk):
         self.slider_value_recovery = []
         self.slider_value_exposure = []
         self.slider_value_birthrates = []
-        self.slider_value_maternal_immunity_loss = []
+        self.slider_value_vaccination = []
         self.slider_value_death_rate = []
         self.slider_value_seasonal_forcing_severity = []
         self.slider_value_num_in_treatment = []
@@ -531,11 +546,11 @@ class App(ctk.CTk):
                 else:
                     self.slider_value_birthrates.append("No")
 
-                if self.checkbox_maternal_immunity_value[i].get() == "Maternal Immunity":
-                    self.create_slider(self.slider_value_maternal_immunity_loss, "Rate of Maternal Immunity Loss", i,
-                                       50, 1, 1000)
+                if self.checkbox_vaccination_value[i].get() == "Vaccinations":
+                    self.create_slider(self.slider_value_vaccination, "Number of Vaccinations", i,
+                                       0.001, 0.01, 0.1)
                 else:
-                    self.slider_value_maternal_immunity_loss.append("No")
+                    self.slider_value_vaccination.append("No")
 
                 if self.checkbox_deaths_value[i].get() == "Deaths":
                     self.create_slider(self.slider_value_death_rate, "Rate of Deaths from Disease", i, 0.2, 0, 1)
