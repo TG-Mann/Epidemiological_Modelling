@@ -24,6 +24,19 @@ iValues = [i]
 rValues = [r]
 tValues = [0.0]
 
+# quarantine values
+ee = 0
+eq = 0
+ej = 0
+k1 = 0
+k2 = 0
+y1 = 0
+y2 = 0
+a1 = 0
+a2 = 0
+f1 = 0
+f2 = 0
+
 def eulerMethod(x):
     methodHasRan = False
     while tValues[-1] < time:
@@ -118,6 +131,15 @@ def SEIR(Values, t):
             vaccination_rate * Values[0],
             num_in_treat * Values[1] - removal_rate_treat * Values[6]]
 
+def SEQIJR(Values, t):
+
+    cbeta = calc_seasonal_forcing(t)
+    return[-cbeta * Values[0]*(ee*Values[1] + ee*eq*Values[2] + Values[3] + ej*Values[4]),
+           cbeta * Values[0]*(ee*Values[1] + ee*eq*Values[2] + Values[3] + ej*Values[4]) - (k1 + y1) * Values[1],
+           y1*Values[1] + k2*Values[2],
+           k1*Values[1] - (a1 + y2) * Values[3],
+           k2*Values[2] + y2*Values[3] - a2*Values[4],
+           f1*a1*Values[3] + f2*a2*Values[4]]
 def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
 
@@ -144,7 +166,8 @@ def solver(chart_type, parameters):
     s = parameters["susceptible"]
     i = parameters["infected"]
     beta = parameters["beta"]
-    gamma = parameters["gamma"]
+    if chart_type != "SEQIJR":
+        gamma = parameters["gamma"]
     reduction_infect = parameters["reduction infect"]
     num_in_treat = parameters["num in treatment"]
     removal_rate_treat = parameters["removal from treatment"]
@@ -179,6 +202,32 @@ def solver(chart_type, parameters):
         S, E, I, R, D, V, T = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5], Us[:, 6]
 
         return [S,E,I,R,D,V,T,ts]
+
+    if chart_type == "SEQIJR":
+
+        e = parameters["exposed"]
+        q = parameters["quarantined"]
+        i = parameters["infected"]
+        j = parameters["isolated"]
+        r = parameters["recovered"]
+
+        ee = parameters["infectivity infected"]
+        eq = parameters["infectivity quarantined"]
+        ej = parameters["infectivity isolated"]
+        k1 = parameters["infectivity exposed ni"]
+        k2 = parameters["quarantined isolation rate"]
+        y1 = parameters["exposed quarantined rate"]
+        y2 = parameters["infectives diagnosed rate"]
+        a1 = parameters["infectives leave rate"]
+        a2 = parameters["isolated leave rate"]
+        f1 = parameters["infectives rexover rate"]
+        f2 = parameters["isolated recover rate"]
+
+        Us = odeint(SEQIJR, [s, e, q, i, j, r], ts)
+        print(a1)
+        S, E, Q, I, J, R = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5]
+
+        return [S, E, Q, I, J, R, ts]
 
 
 

@@ -176,6 +176,7 @@ class App(ctk.CTk):
                 num_of_r = self.slider_value_recovered[y].get()
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
+
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
                 num_of_vac = self.find_vaccination_rate(y)
@@ -183,6 +184,7 @@ class App(ctk.CTk):
                 red_in_infect = self.find_infect_reduction(y)
                 rem_of_treat = self.find_treatment_removal(y)
                 seasonal_forcing = self.find_amplitude(y)
+
                 s, i, r, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
                                                "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
                                                "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
@@ -204,6 +206,7 @@ class App(ctk.CTk):
                 num_of_i = self.slider_value_infected[y].get()
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
+
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
                 num_of_vac = self.find_vaccination_rate(y)
@@ -211,6 +214,7 @@ class App(ctk.CTk):
                 red_in_infect = self.find_infect_reduction(y)
                 rem_of_treat = self.find_treatment_removal(y)
                 seasonal_forcing = self.find_amplitude(y)
+
                 s, i, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
                                             "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
                                                   "num in treatment": num_in_treat, "reduction infect": red_in_infect,
@@ -233,6 +237,7 @@ class App(ctk.CTk):
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_exposure = self.slider_value_exposure[y].get()
+
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
                 num_of_vac = self.find_vaccination_rate(y)
@@ -240,6 +245,7 @@ class App(ctk.CTk):
                 red_in_infect = self.find_infect_reduction(y)
                 rem_of_treat = self.find_treatment_removal(y)
                 seasonal_forcing = self.find_amplitude(y)
+
                 s, e, i, r, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
                                                   "gamma": num_of_gamma, "exposure": num_of_exposure, "births": num_of_birth,
                                                   "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
@@ -250,6 +256,7 @@ class App(ctk.CTk):
                 ax.plot(ts, e)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
+
                 if self.checkbox_deaths_value[y].get() == "Deaths":
                     ax.plot(ts, d)
                 if self.checkbox_vaccination_value[y].get() == "Vaccinations":
@@ -257,16 +264,60 @@ class App(ctk.CTk):
                 if self.checkbox_treatment_value[y].get() == "Treatment Model":
                     ax.plot(ts, t)
 
+            if x.get() == "SEQIJR":
+
+                num_of_s = self.slider_value_susceptible[y].get()
+                num_of_e = self.slider_value_exposed[y].get()
+                num_of_q = self.slider_value_quarantined[y].get()
+                num_of_i = self.slider_value_infected[y].get()
+                num_of_j = self.slider_value_isolated[y].get()
+                num_of_r = self.slider_value_recovered[y].get()
+                num_of_beta = self.slider_value_transmission[y].get()
+                num_of_ee = self.slider_value_infectivity_infected[y].get()
+                num_of_eq = self.slider_value_infectivity_quarantined[y].get()
+                num_of_ej = self.slider_value_infectivity_isolated[y].get()
+                num_of_k1 = self.slider_value_infectivity_exposed_ni[y].get()
+                num_of_k2 = self.slider_value_quarantined_isolated_at_rate[y].get()
+                num_of_y1 = self.slider_value_exposed_quarantined_rate[y].get()
+                num_of_y2 = self.slider_value_infectives_diagnosed_rate[y].get()
+                num_of_a1 = self.slider_value_infectives_leave_rate[y].get()
+                num_of_a2 = self.slider_value_isolated_leave_rate[y].get()
+                num_of_f1 = self.slider_value_infectives_recover_rate[y].get()
+                num_of_f2 = self.slider_value_isolated_recover_rate[y].get()
+                print(num_of_a1)
+                num_of_birth = self.find_birth_rate(y)
+                num_of_deaths = self.find_death_rate(y)
+                num_of_vac = self.find_vaccination_rate(y)
+                num_in_treat = self.find_treatment_rate(y)
+                red_in_infect = self.find_infect_reduction(y)
+                rem_of_treat = self.find_treatment_removal(y)
+                seasonal_forcing = self.find_amplitude(y)
+
+                s, e, q, i, j, r, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "quarantined": num_of_q, "infected": num_of_i, "isolated": num_of_j,
+                                                        "recovered": num_of_r, "beta": num_of_beta, "infectivity infected": num_of_ee, "infectivity quarantined": num_of_eq,
+                                                        "infectivity isolated": num_of_ej, "infectivity exposed ni": num_of_k1, "quarantined isolation rate": num_of_k2,
+                                                        "exposed quarantined rate": num_of_y1, "infectives diagnosed rate": num_of_y2, "infectives leave rate": num_of_a1,
+                                                        "isolated leave rate": num_of_a2, "infectives rexover rate": num_of_f1, "isolated recover rate": num_of_f2,
+                                                        "births": num_of_birth,
+                                                        "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
+                                                        "num in treatment": num_in_treat,
+                                                        "reduction infect": red_in_infect,
+                                                        "removal from treatment": rem_of_treat,
+                                                        "seasonal forcing": seasonal_forcing})
+
+                ax.plot(ts, s)
+                ax.plot(ts, e)
+                ax.plot(ts, q)
+                ax.plot(ts, i)
+                ax.plot(ts, j)
+                ax.plot(ts, r)
+
             y += 1
 
         ax.grid(visible=True)
         canvas = FigureCanvasTkAgg(figure=fig, master=self.sidebar_frame2)
         canvas.draw()
         canvas.get_tk_widget().place(x=10, y=10)
-
-    def setting_chart_values(self, y):
-        num_of_s = self.slider_value_susceptible[y].get()
-
 
     def find_death_rate(self, y):
         if self.checkbox_deaths_value[y].get() == "Deaths":
