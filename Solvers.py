@@ -113,6 +113,9 @@ def SEIR(Values, t):
 
 def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
+
+    # need to add seasonal forcing and quarantine
+
     global beta
     global gamma
     global exposure
