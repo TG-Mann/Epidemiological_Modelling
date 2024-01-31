@@ -13,6 +13,9 @@ exposure = 0.2
 birth_rate = 0
 death_rate = 0
 vaccination_rate = 0
+reduction_infect = 0
+num_in_treat = 0
+removal_rate_treat = 0
 time = 60.0
 deltat = 0.0001
 sValues = [s]
@@ -79,16 +82,16 @@ def createGraph(methodHasRan):
         plt.legend()
         plt.show()
 
-
 def SIR(Values, t):
     #if birth set to value
     #else birth set to 0
 
-    return [-beta * Values[0] * Values[1] + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
-            beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1],
+    return [-beta * Values[0] * (Values[1] + reduction_infect * Values[5]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
+            beta * Values[0] * (Values[1] + reduction_infect * Values[5]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1],
             (1 - death_rate) * (gamma * Values[1]) - birth_rate * Values[2],
             death_rate * (gamma * Values[1]),
-            vaccination_rate * Values[0]]
+            vaccination_rate * Values[0],
+            num_in_treat * Values[1] - removal_rate_treat * Values[5]]
 
 def SIS(Values, t):
 
@@ -114,6 +117,9 @@ def solver(chart_type, parameters):
     global birth_rate
     global death_rate
     global vaccination_rate
+    global reduction_infect
+    global num_in_treat
+    global removal_rate_treat
 
     # either 0 if not selected or slider value if selected
     birth_rate = parameters["births"]
@@ -121,20 +127,24 @@ def solver(chart_type, parameters):
     vaccination_rate = parameters["vaccinated"]
     d = 0
     v = 0
+    t = 0
     s = parameters["susceptible"]
     i = parameters["infected"]
     beta = parameters["beta"]
     gamma = parameters["gamma"]
+    reduction_infect = parameters["reduction infect"]
+    num_in_treat = parameters["num in treatment"]
+    removal_rate_treat = parameters["removal from treatment"]
 
     if chart_type == "SIR":
 
         r = parameters["recovered"]
 
-        Us = odeint(SIR, [s, i, r, d, v], ts)
+        Us = odeint(SIR, [s, i, r, d, v, t], ts)
 
-        S, I, R, D, V = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4]
+        S, I, R, D, V, T = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5]
 
-        return [S,I,R,D,V,ts]
+        return [S,I,R,D,V,T,ts]
 
     if chart_type == "SIS":
 

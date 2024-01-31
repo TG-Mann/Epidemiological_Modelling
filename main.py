@@ -56,7 +56,7 @@ class App(ctk.CTk):
         self.slider_value_vaccination = []
         self.slider_value_death_rate = []
         self.slider_value_seasonal_forcing_severity = []
-        self.slider_value_num_in_treatment = []
+        self.slider_value_length_of_treatment = []
         self.slider_value_reduced_infect_treatment = []
         self.slider_value_selected_treatment = []
         self.slider_value_quarantined = []
@@ -168,9 +168,14 @@ class App(ctk.CTk):
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
                 num_of_vac = self.find_vaccination_rate(y)
-                s, i, r, d, v, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
+                num_in_treat = self.find_treatment_rate(y)
+                red_in_infect = self.find_infect_reduction(y)
+                rem_of_treat = self.find_treatment_removal(y)
+                s, i, r, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
                                                "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
-                                               "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac})
+                                               "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
+                                                        "num in treatment": num_in_treat, "reduction infect": red_in_infect,
+                                                        "removal from treatment": rem_of_treat})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
@@ -178,6 +183,8 @@ class App(ctk.CTk):
                     ax.plot(ts, d)
                 if self.checkbox_vaccination_value[y].get() == "Vaccinations":
                     ax.plot(ts, v)
+                if self.checkbox_treatment_value[y].get() == "Treatment Model":
+                    ax.plot(ts, t)
 
             if x.get() == "SIS":
 
@@ -238,6 +245,24 @@ class App(ctk.CTk):
     def find_vaccination_rate(self, y):
         if self.checkbox_vaccination_value[y].get() == "Vaccinations":
             return self.slider_value_vaccination[y].get()
+        else:
+            return 0
+
+    def find_treatment_rate(self, y):
+        if self.checkbox_treatment_value[y].get() == "Treatment Model":
+            return self.slider_value_selected_treatment[y].get()
+        else:
+            return 0
+
+    def find_treatment_removal(self, y):
+        if self.checkbox_treatment_value[y].get() == "Treatment Model":
+            return self.slider_value_length_of_treatment[y].get()
+        else:
+            return 0
+
+    def find_infect_reduction(self, y):
+        if self.checkbox_treatment_value[y].get() == "Treatment Model":
+            return self.slider_value_reduced_infect_treatment[y].get()
         else:
             return 0
 
@@ -471,7 +496,7 @@ class App(ctk.CTk):
         self.slider_value_vaccination = []
         self.slider_value_death_rate = []
         self.slider_value_seasonal_forcing_severity = []
-        self.slider_value_num_in_treatment = []
+        self.slider_value_length_of_treatment = []
         self.slider_value_reduced_infect_treatment = []
         self.slider_value_selected_treatment = []
         self.slider_value_quarantined = []
@@ -570,11 +595,11 @@ class App(ctk.CTk):
                     self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
                                     padx=5, pady=5)
 
-                    self.create_slider(self.slider_value_num_in_treatment, "Number in Treatment", i, 50, 1, 1000)
+                    self.create_slider(self.slider_value_length_of_treatment, "Rate of Removal treatment", i, 0.5, 0, 1)
                     self.create_slider(self.slider_value_reduced_infect_treatment, "Reduced Infectivity from Treatment",
-                                       i, 50, 1, 1000)
+                                       i, 1, 0, 10)
                     self.create_slider(self.slider_value_selected_treatment, "Fraction selected for Treatment", i,
-                                       50, 1, 1000)
+                                       0.25, 0, 0.5)
 
                 if self.checkbox_treatment_value[i].get() == "Quarantine":
                     self.number_of_sliders += 1
