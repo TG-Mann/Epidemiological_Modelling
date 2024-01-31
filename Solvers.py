@@ -95,10 +95,11 @@ def SIR(Values, t):
 
 def SIS(Values, t):
 
-    return [-beta * Values[0] * Values[1] + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
-            beta * Values[0] * Values[1] - gamma * Values[1] - birth_rate * Values[1],
+    return [-beta * Values[0] * (Values[1] + reduction_infect * Values[4]) + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
+            beta * Values[0] * (Values[1] + reduction_infect * Values[4]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1],
             death_rate * (gamma * Values[1]),
-            vaccination_rate * Values[0]]
+            vaccination_rate * Values[0],
+            num_in_treat * Values[1] - removal_rate_treat * Values[4]]
 
 def SEIR(Values, t):
 
@@ -148,11 +149,11 @@ def solver(chart_type, parameters):
 
     if chart_type == "SIS":
 
-        Us = odeint(SIS, [s, i, d, v], ts)
+        Us = odeint(SIS, [s, i, d, v, t], ts)
 
-        S, I, D, V = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3]
+        S, I, D, V, T = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4]
 
-        return [S,I,D,V,ts]
+        return [S,I,D,V,T,ts]
 
     if chart_type == "SEIR":
 
@@ -160,11 +161,11 @@ def solver(chart_type, parameters):
         r = parameters["recovered"]
         exposure = parameters["exposure"]
 
-        Us = odeint(SEIR, [s, e, i, r, d, v], ts)
+        Us = odeint(SEIR, [s, e, i, r, d, v, t], ts)
 
-        S, E, I, R, D, V = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5]
+        S, E, I, R, D, V, T = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5], Us[:, 6]
 
-        return [S,E,I,R,D,V,ts]
+        return [S,E,I,R,D,V,T,ts]
 
 
 

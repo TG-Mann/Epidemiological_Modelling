@@ -195,14 +195,21 @@ class App(ctk.CTk):
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
                 num_of_vac = self.find_vaccination_rate(y)
-                s, i, d, v, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
-                                            "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac})
+                num_in_treat = self.find_treatment_rate(y)
+                red_in_infect = self.find_infect_reduction(y)
+                rem_of_treat = self.find_treatment_removal(y)
+                s, i, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
+                                            "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
+                                                  "num in treatment": num_in_treat, "reduction infect": red_in_infect,
+                                                        "removal from treatment": rem_of_treat})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 if self.checkbox_deaths_value[y].get() == "Deaths":
                     ax.plot(ts, d)
                 if self.checkbox_vaccination_value[y].get() == "Vaccinations":
                     ax.plot(ts, v)
+                if self.checkbox_treatment_value[y].get() == "Treatment Model":
+                    ax.plot(ts, t)
 
             if x.get() == "SEIR":
 
@@ -216,9 +223,15 @@ class App(ctk.CTk):
                 num_of_birth = self.find_birth_rate(y)
                 num_of_deaths = self.find_death_rate(y)
                 num_of_vac = self.find_vaccination_rate(y)
-                s, e, i, r, d, v, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
+                num_in_treat = self.find_treatment_rate(y)
+                red_in_infect = self.find_infect_reduction(y)
+                rem_of_treat = self.find_treatment_removal(y)
+                s, e, i, r, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
                                                   "gamma": num_of_gamma, "exposure": num_of_exposure, "births": num_of_birth,
-                                                  "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac})
+                                                  "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
+                                                        "num in treatment": num_in_treat,
+                                                        "reduction infect": red_in_infect,
+                                                        "removal from treatment": rem_of_treat})
                 ax.plot(ts, s)
                 ax.plot(ts, e)
                 ax.plot(ts, i)
@@ -227,6 +240,8 @@ class App(ctk.CTk):
                     ax.plot(ts, d)
                 if self.checkbox_vaccination_value[y].get() == "Vaccinations":
                     ax.plot(ts, v)
+                if self.checkbox_treatment_value[y].get() == "Treatment Model":
+                    ax.plot(ts, t)
 
             y += 1
 
@@ -423,14 +438,9 @@ class App(ctk.CTk):
             self.checkbox_quarantine.grid(row=2, column=0, padx=self.button_padding, pady=self.button_padding,
                                           columnspan=1, sticky="nsew")
 
-            if self.checkbox_values[i].get() == "SIS":
-                self.button_status = "disabled"
-            else:
-                self.button_status = "normal"
-
             self.checkbox_treatment_value.append(ctk.StringVar(value="No"))
             self.checkbox_treatment_model = ctk.CTkRadioButton(master=self.types_of_detail[i], text="Treatment Model",
-                                                               value="Treatment Model", state=self.button_status,
+                                                               value="Treatment Model",
                                                                variable=self.checkbox_treatment_value[i], width=25,
                                                                fg_color=self.secondary_colour,
                                                                font=ctk.CTkFont(self.font, size=12, weight="bold"))
