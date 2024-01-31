@@ -171,11 +171,12 @@ class App(ctk.CTk):
                 num_in_treat = self.find_treatment_rate(y)
                 red_in_infect = self.find_infect_reduction(y)
                 rem_of_treat = self.find_treatment_removal(y)
+                seasonal_forcing = self.find_amplitude(y)
                 s, i, r, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "recovered": num_of_r,
                                                "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
                                                "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
                                                         "num in treatment": num_in_treat, "reduction infect": red_in_infect,
-                                                        "removal from treatment": rem_of_treat})
+                                                        "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 ax.plot(ts, r)
@@ -198,10 +199,11 @@ class App(ctk.CTk):
                 num_in_treat = self.find_treatment_rate(y)
                 red_in_infect = self.find_infect_reduction(y)
                 rem_of_treat = self.find_treatment_removal(y)
+                seasonal_forcing = self.find_amplitude(y)
                 s, i, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
                                             "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
                                                   "num in treatment": num_in_treat, "reduction infect": red_in_infect,
-                                                        "removal from treatment": rem_of_treat})
+                                                        "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing})
                 ax.plot(ts, s)
                 ax.plot(ts, i)
                 if self.checkbox_deaths_value[y].get() == "Deaths":
@@ -226,12 +228,13 @@ class App(ctk.CTk):
                 num_in_treat = self.find_treatment_rate(y)
                 red_in_infect = self.find_infect_reduction(y)
                 rem_of_treat = self.find_treatment_removal(y)
+                seasonal_forcing = self.find_amplitude(y)
                 s, e, i, r, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
                                                   "gamma": num_of_gamma, "exposure": num_of_exposure, "births": num_of_birth,
                                                   "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
                                                         "num in treatment": num_in_treat,
                                                         "reduction infect": red_in_infect,
-                                                        "removal from treatment": rem_of_treat})
+                                                        "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing})
                 ax.plot(ts, s)
                 ax.plot(ts, e)
                 ax.plot(ts, i)
@@ -254,6 +257,12 @@ class App(ctk.CTk):
         if self.checkbox_deaths_value[y].get() == "Deaths":
 
             return self.slider_value_death_rate[y].get()
+        else:
+            return 0
+
+    def find_amplitude(self, y):
+        if self.checkbox_seasonal_forcing_value[y].get() == "Seasonal Forcing":
+            return self.slider_value_seasonal_forcing_severity[y].get()
         else:
             return 0
 
@@ -431,16 +440,10 @@ class App(ctk.CTk):
                                           columnspan=1, sticky="nsew")
 
             self.checkbox_treatment_value.append(ctk.StringVar(value="No"))
-            self.checkbox_quarantine = ctk.CTkRadioButton(master=self.types_of_detail[i], text="Quarantine",
-                                                          value="Quarantine", variable=self.checkbox_treatment_value[i],
-                                                          width=25, fg_color=self.secondary_colour,
-                                                          font=ctk.CTkFont(self.font, size=12, weight="bold"))
-            self.checkbox_quarantine.grid(row=2, column=0, padx=self.button_padding, pady=self.button_padding,
-                                          columnspan=1, sticky="nsew")
 
             self.checkbox_treatment_value.append(ctk.StringVar(value="No"))
-            self.checkbox_treatment_model = ctk.CTkRadioButton(master=self.types_of_detail[i], text="Treatment Model",
-                                                               value="Treatment Model",
+            self.checkbox_treatment_model = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Treatment Model",
+                                                               onvalue="Treatment Model", offvalue="No",
                                                                variable=self.checkbox_treatment_value[i], width=25,
                                                                fg_color=self.secondary_colour,
                                                                font=ctk.CTkFont(self.font, size=12, weight="bold"))
@@ -594,7 +597,7 @@ class App(ctk.CTk):
 
                 if self.checkbox_seasonal_forcing_value[i].get() == "Seasonal Forcing":
                     self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", i,
-                                       50, 1, 1000)
+                                       0.5, 0, 1)
                 else:
                     self.slider_value_seasonal_forcing_severity.append("No")
 
@@ -610,16 +613,6 @@ class App(ctk.CTk):
                                        i, 1, 0, 10)
                     self.create_slider(self.slider_value_selected_treatment, "Fraction selected for Treatment", i,
                                        0.25, 0, 0.5)
-
-                if self.checkbox_treatment_value[i].get() == "Quarantine":
-                    self.number_of_sliders += 1
-                    self.label = ctk.CTkLabel(self.types_of_detail[i], text="Quarantine Parameters",
-                                              font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
-                                    padx=5, pady=5)
-
-                    self.create_slider(self.slider_value_quarantined, "Number in Quarantine", i, 50, 1, 1000)
-                    self.create_slider(self.slider_value_isolated, "Number isolated", i, 50, 1, 1000)
 
             i += 1
 

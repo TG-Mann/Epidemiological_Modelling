@@ -16,6 +16,7 @@ vaccination_rate = 0
 reduction_infect = 0
 num_in_treat = 0
 removal_rate_treat = 0
+seasonal_forcing = 0
 time = 60.0
 deltat = 0.0001
 sValues = [s]
@@ -82,12 +83,16 @@ def createGraph(methodHasRan):
         plt.legend()
         plt.show()
 
+def calc_seasonal_forcing(t):
+    if seasonal_forcing == 0:
+        return beta
+    else:
+        return beta * (1 + (seasonal_forcing * np.cos(2 * np.pi * (t / 60))))
 def SIR(Values, t):
-    #if birth set to value
-    #else birth set to 0
 
-    return [-beta * Values[0] * (Values[1] + reduction_infect * Values[5]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
-            beta * Values[0] * (Values[1] + reduction_infect * Values[5]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1],
+    cbeta = calc_seasonal_forcing(t)
+    return [-cbeta * Values[0] * (Values[1] + reduction_infect * Values[5]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
+            cbeta * Values[0] * (Values[1] + reduction_infect * Values[5]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1],
             (1 - death_rate) * (gamma * Values[1]) - birth_rate * Values[2],
             death_rate * (gamma * Values[1]),
             vaccination_rate * Values[0],
@@ -95,16 +100,18 @@ def SIR(Values, t):
 
 def SIS(Values, t):
 
-    return [-beta * Values[0] * (Values[1] + reduction_infect * Values[4]) + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
-            beta * Values[0] * (Values[1] + reduction_infect * Values[4]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1],
+    cbeta = calc_seasonal_forcing(t)
+    return [-cbeta * Values[0] * (Values[1] + reduction_infect * Values[4]) + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
+            cbeta * Values[0] * (Values[1] + reduction_infect * Values[4]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1],
             death_rate * (gamma * Values[1]),
             vaccination_rate * Values[0],
             num_in_treat * Values[1] - removal_rate_treat * Values[4]]
 
 def SEIR(Values, t):
 
-    return [-beta * Values[0] * (Values[2] + reduction_infect * Values[6]) + birth_rate * (Values[0] + Values[1] + Values[0] - vaccination_rate * Values[0]),
-            beta * Values[0] * Values[2] - exposure * Values[1] - birth_rate * Values[1],
+    cbeta = calc_seasonal_forcing(t)
+    return [-cbeta * Values[0] * (Values[2] + reduction_infect * Values[6]) + birth_rate * (Values[0] + Values[1] + Values[0] - vaccination_rate * Values[0]),
+            cbeta * Values[0] * Values[2] - exposure * Values[1] - birth_rate * Values[1],
             exposure * Values[1] - (gamma + num_in_treat) * Values[2] - birth_rate * Values[2],
             (1 - death_rate) * (gamma * Values[2]) - birth_rate * Values[3],
             death_rate * (gamma * Values[2]),
@@ -125,6 +132,7 @@ def solver(chart_type, parameters):
     global reduction_infect
     global num_in_treat
     global removal_rate_treat
+    global seasonal_forcing
 
     # either 0 if not selected or slider value if selected
     birth_rate = parameters["births"]
@@ -140,6 +148,7 @@ def solver(chart_type, parameters):
     reduction_infect = parameters["reduction infect"]
     num_in_treat = parameters["num in treatment"]
     removal_rate_treat = parameters["removal from treatment"]
+    seasonal_forcing = parameters["seasonal forcing"]
 
     if chart_type == "SIR":
 
