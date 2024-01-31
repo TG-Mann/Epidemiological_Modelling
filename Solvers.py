@@ -103,12 +103,13 @@ def SIS(Values, t):
 
 def SEIR(Values, t):
 
-    return [-beta * Values[0] * Values[2] + birth_rate * (Values[0] + Values[1] + Values[0] - vaccination_rate * Values[0]),
+    return [-beta * Values[0] * (Values[2] + reduction_infect * Values[6]) + birth_rate * (Values[0] + Values[1] + Values[0] - vaccination_rate * Values[0]),
             beta * Values[0] * Values[2] - exposure * Values[1] - birth_rate * Values[1],
-            exposure * Values[1] - gamma * Values[2] - birth_rate * Values[2],
+            exposure * Values[1] - (gamma + num_in_treat) * Values[2] - birth_rate * Values[2],
             (1 - death_rate) * (gamma * Values[2]) - birth_rate * Values[3],
             death_rate * (gamma * Values[2]),
-            vaccination_rate * Values[0]]
+            vaccination_rate * Values[0],
+            num_in_treat * Values[1] - removal_rate_treat * Values[6]]
 
 def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
