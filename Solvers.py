@@ -247,7 +247,7 @@ def solver(chart_type, parameters):
         f2 = parameters["isolated recover rate"]
 
         Us = odeint(SEQIJR, [s, e, q, i, j, r], ts)
-        print(a1)
+
         S, E, Q, I, J, R = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5]
 
         return [S, E, Q, I, J, R, ts]
