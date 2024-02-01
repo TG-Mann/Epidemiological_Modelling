@@ -17,6 +17,8 @@ reduction_infect = 0
 num_in_treat = 0
 removal_rate_treat = 0
 seasonal_forcing = 0
+removal_rate_q = 0
+reduction_interaction_q = 0
 time = 60.0
 deltat = 0.0001
 sValues = [s]
@@ -104,12 +106,13 @@ def calc_seasonal_forcing(t):
 def SIR(Values, t):
 
     cbeta = calc_seasonal_forcing(t)
-    return [-cbeta * Values[0] * (Values[1] + reduction_infect * Values[5]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
-            cbeta * Values[0] * (Values[1] + reduction_infect * Values[5]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1],
+    return [-cbeta * Values[0] * (Values[1] + reduction_infect * Values[5] + reduction_interaction_q * Values[6]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
+            cbeta * Values[0] * (Values[1] + reduction_infect * Values[5]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1] - removal_rate_q * Values[1],
             (1 - death_rate) * (gamma * Values[1]) - birth_rate * Values[2],
             death_rate * (gamma * Values[1]),
             vaccination_rate * Values[0],
-            num_in_treat * Values[1] - removal_rate_treat * Values[5]]
+            num_in_treat * Values[1] - removal_rate_treat * Values[5],
+            - reduction_interaction_q * Values[6] + removal_rate_q * Values[1]]
 
 def SIS(Values, t):
 
@@ -133,7 +136,7 @@ def SEIR(Values, t):
 
 def SEQIJR(Values, t):
     cbeta = calc_seasonal_forcing(t)
-    print(ee)
+    print(Values[0])
     return[-cbeta * Values[0]*(ee*Values[1] + ee*eq*Values[2] + Values[3] + ej*Values[4]),
            cbeta * Values[0]*(ee*Values[1] + ee*eq*Values[2] + Values[3] + ej*Values[4]) - (k1 + y1) * Values[1],
            y1*Values[1] + k2*Values[2],
@@ -155,6 +158,8 @@ def solver(chart_type, parameters):
     global num_in_treat
     global removal_rate_treat
     global seasonal_forcing
+    global removal_rate_q
+    global reduction_interaction_q
 
     global ee
     global eq
@@ -186,16 +191,20 @@ def solver(chart_type, parameters):
     num_in_treat = parameters["num in treatment"]
     removal_rate_treat = parameters["removal from treatment"]
     seasonal_forcing = parameters["seasonal forcing"]
-
+    removal_rate_q = parameters["removal rate q"]
+    reduction_interaction_q = parameters["Reduced interaction q"]
+    j = parameters["isolated"]
     if chart_type == "SIR":
 
         r = parameters["recovered"]
 
-        Us = odeint(SIR, [s, i, r, d, v, t], ts)
+        Us = odeint(SIR, [s, i, r, d, v, t, j], ts)
 
-        S, I, R, D, V, T = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5]
+        print(j)
 
-        return [S,I,R,D,V,T,ts]
+        S, I, R, D, V, T, J = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5], Us[:, 6]
+
+        return [S,I,R,D,V,T,J, ts]
 
     if chart_type == "SIS":
 
