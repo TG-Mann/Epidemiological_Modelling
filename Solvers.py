@@ -132,8 +132,8 @@ def SEIR(Values, t):
             num_in_treat * Values[1] - removal_rate_treat * Values[6]]
 
 def SEQIJR(Values, t):
-
     cbeta = calc_seasonal_forcing(t)
+    print(ee)
     return[-cbeta * Values[0]*(ee*Values[1] + ee*eq*Values[2] + Values[3] + ej*Values[4]),
            cbeta * Values[0]*(ee*Values[1] + ee*eq*Values[2] + Values[3] + ej*Values[4]) - (k1 + y1) * Values[1],
            y1*Values[1] + k2*Values[2],
@@ -156,6 +156,18 @@ def solver(chart_type, parameters):
     global removal_rate_treat
     global seasonal_forcing
 
+    global ee
+    global eq
+    global ej
+    global k1
+    global k2
+    global y1
+    global y2
+    global a1
+    global a2
+    global f1
+    global f2
+
     # either 0 if not selected or slider value if selected
     birth_rate = parameters["births"]
     death_rate = parameters["deaths_from_disease"]
@@ -166,8 +178,10 @@ def solver(chart_type, parameters):
     s = parameters["susceptible"]
     i = parameters["infected"]
     beta = parameters["beta"]
+
     if chart_type != "SEQIJR":
         gamma = parameters["gamma"]
+
     reduction_infect = parameters["reduction infect"]
     num_in_treat = parameters["num in treatment"]
     removal_rate_treat = parameters["removal from treatment"]

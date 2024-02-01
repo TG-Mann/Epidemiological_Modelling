@@ -667,26 +667,26 @@ class App(ctk.CTk):
                     self.create_slider(self.slider_value_isolated, "Number of Isolated", i, 1, 1, 100)
 
                     # these are the E's
-                    self.create_slider(self.slider_value_infectivity_infected, "Infectivity of Infected", i, 1, 0, 10)
-                    self.create_slider(self.slider_value_infectivity_quarantined, "Infectivity of Quarantined", i, 1, 0, 10)
-                    self.create_slider(self.slider_value_infectivity_isolated, "Infectivity of Isolated", i, 1, 0, 10)
+                    self.create_slider(self.slider_value_infectivity_infected, "Infectivity of Infected", i, 0.0005, 0.00001, 0.001)
+                    self.create_slider(self.slider_value_infectivity_quarantined, "Infectivity of Quarantined", i, 0.0005, 0.00001, 0.001)
+                    self.create_slider(self.slider_value_infectivity_isolated, "Infectivity of Isolated", i, 0.0005, 0.00001, 0.001)
 
                     # these are the K's
-                    self.create_slider(self.slider_value_infectivity_exposed_ni, "Infectivity of Exposed not isolated", i, 2, 0, 10)
+                    self.create_slider(self.slider_value_infectivity_exposed_ni, "Infectivity of Exposed not isolated", i, 0.0008, 0, 10)
                     self.create_slider(self.slider_value_quarantined_isolated_at_rate, "Quartined members with systoms are isolated at rate",
                                        i, 1, 0, 10)
 
                     # these are the Y's
                     self.create_slider(self.slider_value_exposed_quarantined_rate, "Exposed quarantined at rate",
-                                      i, 2, 0, 10)
+                                      i, 0.5, 0, 10)
                     self.create_slider(self.slider_value_infectives_diagnosed_rate, "Infectives diagnosed rate",
-                                       i, 2, 0, 10)
+                                       i, 0.5, 0, 10)
 
                     # these are the A's
                     self.create_slider(self.slider_value_infectives_leave_rate, "Infectives leave at rate",
-                                       i, 2, 0, 10)
+                                       i, 0.5, 0, 10)
                     self.create_slider(self.slider_value_isolated_leave_rate, "Isolated leave rate",
-                                       i, 2, 0, 10)
+                                       i, 0.5, 0, 10)
 
                     # these are the F's
                     self.create_slider(self.slider_value_infectives_recover_rate, "Fraction Infectives recovering",
