@@ -190,12 +190,13 @@ class App(ctk.CTk):
                                                         "Reduced interaction q": reduced_infect_q, "removal rate q": removal_rate_q,
                                                         "isolated": num_of_j})
 
-                self.display_charts(s,"",i,r,d,v,t,ts,ax,y)
+                self.display_charts(s,"",i,r,d,v,t,j,ts,ax,y)
 
             if x.get() == "SIS":
 
                 num_of_s = self.slider_value_susceptible[y].get()
                 num_of_i = self.slider_value_infected[y].get()
+                num_of_j = self.find_isolated_number(y)
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
 
@@ -210,11 +211,12 @@ class App(ctk.CTk):
                 reduced_infect_q = self.find_reduced_rate(y)
                 removal_rate_q = self.find_removal_rate(y)
 
-                s, i, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
+                s, i, d, v, t, j, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i, "beta": num_of_beta, "gamma": num_of_gamma, "births": num_of_birth,
                                             "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
                                                   "num in treatment": num_in_treat, "reduction infect": red_in_infect,
                                                         "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing,
-                                                     "Reduced interaction q": reduced_infect_q, "removal rate q": removal_rate_q})
+                                                     "Reduced interaction q": reduced_infect_q, "removal rate q": removal_rate_q,
+                                                        "isolated": num_of_j})
 
                 self.display_charts(s,"",i,"",d,v,t,ts,ax,y)
 
@@ -224,6 +226,7 @@ class App(ctk.CTk):
                 num_of_e = self.slider_value_exposed[y].get()
                 num_of_i = self.slider_value_infected[y].get()
                 num_of_r = self.slider_value_recovered[y].get()
+                num_of_j = self.find_isolated_number(y)
                 num_of_beta = self.slider_value_transmission[y].get()
                 num_of_gamma = self.slider_value_recovery[y].get()
                 num_of_exposure = self.slider_value_exposure[y].get()
@@ -236,14 +239,19 @@ class App(ctk.CTk):
                 rem_of_treat = self.find_treatment_removal(y)
                 seasonal_forcing = self.find_amplitude(y)
 
-                s, e, i, r, d, v, t, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
+                reduced_infect_q = self.find_reduced_rate(y)
+                removal_rate_q = self.find_removal_rate(y)
+
+                s, e, i, r, d, v, t, j, ts = solver(x.get(), {"susceptible": num_of_s, "exposed": num_of_e, "infected": num_of_i, "recovered": num_of_r, "beta": num_of_beta,
                                                   "gamma": num_of_gamma, "exposure": num_of_exposure, "births": num_of_birth,
                                                   "deaths_from_disease": num_of_deaths, "vaccinated": num_of_vac,
                                                         "num in treatment": num_in_treat,
                                                         "reduction infect": red_in_infect,
-                                                        "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing})
+                                                        "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing,
+                                                              "isolated": num_of_j,
+                                                              "Reduced interaction q": reduced_infect_q, "removal rate q": removal_rate_q})
 
-                self.display_charts(s,e,i,r,d,v,t,ts,ax,y)
+                self.display_charts(s,e,i,r,d,v,t,j,ts,ax,y)
 
             y += 1
 
@@ -252,7 +260,7 @@ class App(ctk.CTk):
         canvas.draw()
         canvas.get_tk_widget().place(x=10, y=10)
 
-    def display_charts(self, s, e, i, r, d, v, t, ts, ax, y):
+    def display_charts(self, s, e, i, r, d, v, t, j, ts, ax, y):
 
         ax.plot(ts, s)
         ax.plot(ts, i)
@@ -269,6 +277,8 @@ class App(ctk.CTk):
             ax.plot(ts, v)
         if self.checkbox_treatment_value[y].get() == "Treatment Model":
             ax.plot(ts, t)
+        if self.checkbox_quarantine_value[y].get() == "Quarantine":
+            ax.plot(ts, j)
 
     def find_death_rate(self, y):
         if self.checkbox_deaths_value[y].get() == "Deaths":
@@ -679,7 +689,7 @@ class App(ctk.CTk):
                     self.create_slider(self.slider_value_reduced_infect_quarantine, "Reduced Infectivity from Quarantine",
                                        i, 0.5, 0, 1)
                     self.create_slider(self.slider_value_isolated, "Number isolated",
-                                       i, 0.5, 0, 1)
+                                       i, 0, 0, 100)
                 else:
                     self.slider_value_removal_to_j.append("No")
                     self.slider_value_reduced_infect_quarantine.append("No")

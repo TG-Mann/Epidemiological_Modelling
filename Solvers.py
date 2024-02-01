@@ -106,22 +106,24 @@ def SIR(Values, t):
 def SIS(Values, t):
 
     cbeta = calc_seasonal_forcing(t)
-    return [-cbeta * Values[0] * (Values[1] + reduction_infect * Values[4]) + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
-            cbeta * Values[0] * (Values[1] + reduction_infect * Values[4]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1],
+    return [-cbeta * Values[0] * (Values[1] + reduction_infect * Values[4] + reduction_interaction_q * Values[5]) + (1 - death_rate) * (gamma * Values[1]) + birth_rate * (Values[0] + Values[1] + Values[0]) - vaccination_rate * Values[0],
+            cbeta * Values[0] * (Values[1] + reduction_infect * Values[4]) - (gamma + num_in_treat) * Values[1] - birth_rate * Values[1] - removal_rate_q * Values[1],
             death_rate * (gamma * Values[1]),
             vaccination_rate * Values[0],
-            num_in_treat * Values[1] - removal_rate_treat * Values[4]]
+            num_in_treat * Values[1] - removal_rate_treat * Values[4],
+            - reduction_interaction_q * Values[5] + removal_rate_q * Values[1]]
 
 def SEIR(Values, t):
-
+    print(removal_rate_q)
     cbeta = calc_seasonal_forcing(t)
-    return [-cbeta * Values[0] * (Values[2] + reduction_infect * Values[6]) + birth_rate * (Values[0] + Values[1] + Values[0] - vaccination_rate * Values[0]),
+    return [-cbeta * Values[0] * (Values[2] + reduction_infect * Values[6] + reduction_interaction_q * Values[7]) + birth_rate * (Values[0] + Values[1] + Values[0] - vaccination_rate * Values[0]),
             cbeta * Values[0] * Values[2] - exposure * Values[1] - birth_rate * Values[1],
-            exposure * Values[1] - (gamma + num_in_treat) * Values[2] - birth_rate * Values[2],
+            exposure * Values[1] - (gamma + num_in_treat) * Values[2] - birth_rate * Values[2] - removal_rate_q * Values[2],
             (1 - death_rate) * (gamma * Values[2]) - birth_rate * Values[3],
             death_rate * (gamma * Values[2]),
             vaccination_rate * Values[0],
-            num_in_treat * Values[1] - removal_rate_treat * Values[6]]
+            num_in_treat * Values[1] - removal_rate_treat * Values[6],
+            - reduction_interaction_q * Values[7] + removal_rate_q * Values[2]]
 
 def solver(chart_type, parameters):
     ts = np.arange(0, 60, 0.01)
@@ -160,12 +162,12 @@ def solver(chart_type, parameters):
     num_in_treat = parameters["num in treatment"]
     removal_rate_treat = parameters["removal from treatment"]
     seasonal_forcing = parameters["seasonal forcing"]
+    j = parameters["isolated"]
+    removal_rate_q = parameters["removal rate q"]
+    reduction_interaction_q = parameters["Reduced interaction q"]
 
     if chart_type == "SIR":
 
-        removal_rate_q = parameters["removal rate q"]
-        reduction_interaction_q = parameters["Reduced interaction q"]
-        j = parameters["isolated"]
 
         r = parameters["recovered"]
 
@@ -177,11 +179,11 @@ def solver(chart_type, parameters):
 
     if chart_type == "SIS":
 
-        Us = odeint(SIS, [s, i, d, v, t], ts)
+        Us = odeint(SIS, [s, i, d, v, t, j], ts)
 
-        S, I, D, V, T = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4]
+        S, I, D, V, T, J = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5]
 
-        return [S,I,D,V,T,ts]
+        return [S,I,D,V,T,J,ts]
 
     if chart_type == "SEIR":
 
@@ -189,11 +191,11 @@ def solver(chart_type, parameters):
         r = parameters["recovered"]
         exposure = parameters["exposure"]
 
-        Us = odeint(SEIR, [s, e, i, r, d, v, t], ts)
+        Us = odeint(SEIR, [s, e, i, r, d, v, t, j], ts)
 
-        S, E, I, R, D, V, T = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5], Us[:, 6]
+        S, E, I, R, D, V, T, J = Us[:, 0], Us[:, 1], Us[:, 2], Us[:, 3], Us[:, 4], Us[:, 5], Us[:, 6], Us[:, 7]
 
-        return [S,E,I,R,D,V,T,ts]
+        return [S,E,I,R,D,V,T,J,ts]
 
 
 
