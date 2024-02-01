@@ -6,7 +6,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 ctk.set_appearance_mode("dark")
 
-
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -29,6 +28,7 @@ class App(ctk.CTk):
         self.button_pady = 20
         self.menu_present = False
 
+        # num of charts picked by user
         self.num_of_charts = 0
 
         # Model Menu Parameters
@@ -62,18 +62,7 @@ class App(ctk.CTk):
         self.slider_value_selected_treatment = []
         self.slider_value_quarantined = []
         self.slider_value_isolated = []
-        #self.slider_value_infectivity_infected = []
-        #self.slider_value_infectivity_quarantined = []
-        #self.slider_value_infectivity_isolated = []
-        #self.slider_value_infectivity_exposed_ni = []
-        #self.slider_value_quarantined_isolated_at_rate = []
-        #self.slider_value_exposed_quarantined_rate = []
-        #self.slider_value_infectives_diagnosed_rate = []
-        #self.slider_value_infectives_leave_rate = []
-        #self.slider_value_isolated_leave_rate = []
-        #self.slider_value_infectives_recover_rate = []
-        #self.slider_value_isolated_recover_rate = []
-        self.slider_value_removal_to_q = []
+        self.slider_value_removal_to_j = []
         self.slider_value_reduced_infect_quarantine = []
 
         # removes titlebar
@@ -164,6 +153,8 @@ class App(ctk.CTk):
 
     def setup_chart(self):
 
+        # need to add isolation to sis and seir
+
         fig = Figure(figsize=(7, 7), facecolor=self.background_colour, alpha=0.9)
         ax = fig.add_subplot()
         ax.set_facecolor(self.background_colour)
@@ -198,17 +189,8 @@ class App(ctk.CTk):
                                                         "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing,
                                                         "Reduced interaction q": reduced_infect_q, "removal rate q": removal_rate_q,
                                                         "isolated": num_of_j})
-                ax.plot(ts, s)
-                ax.plot(ts, i)
-                ax.plot(ts, r)
-                if self.checkbox_deaths_value[y].get() == "Deaths":
-                    ax.plot(ts, d)
-                if self.checkbox_vaccination_value[y].get() == "Vaccinations":
-                    ax.plot(ts, v)
-                if self.checkbox_treatment_value[y].get() == "Treatment Model":
-                    ax.plot(ts, t)
-                if self.checkbox_quarantine_value[y].get() == "Quarantine":
-                    ax.plot(ts, j)
+
+                self.display_charts(s,"",i,r,d,v,t,ts,ax,y)
 
             if x.get() == "SIS":
 
@@ -233,14 +215,8 @@ class App(ctk.CTk):
                                                   "num in treatment": num_in_treat, "reduction infect": red_in_infect,
                                                         "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing,
                                                      "Reduced interaction q": reduced_infect_q, "removal rate q": removal_rate_q})
-                ax.plot(ts, s)
-                ax.plot(ts, i)
-                if self.checkbox_deaths_value[y].get() == "Deaths":
-                    ax.plot(ts, d)
-                if self.checkbox_vaccination_value[y].get() == "Vaccinations":
-                    ax.plot(ts, v)
-                if self.checkbox_treatment_value[y].get() == "Treatment Model":
-                    ax.plot(ts, t)
+
+                self.display_charts(s,"",i,"",d,v,t,ts,ax,y)
 
             if x.get() == "SEIR":
 
@@ -266,17 +242,8 @@ class App(ctk.CTk):
                                                         "num in treatment": num_in_treat,
                                                         "reduction infect": red_in_infect,
                                                         "removal from treatment": rem_of_treat, "seasonal forcing": seasonal_forcing})
-                ax.plot(ts, s)
-                ax.plot(ts, e)
-                ax.plot(ts, i)
-                ax.plot(ts, r)
 
-                if self.checkbox_deaths_value[y].get() == "Deaths":
-                    ax.plot(ts, d)
-                if self.checkbox_vaccination_value[y].get() == "Vaccinations":
-                    ax.plot(ts, v)
-                if self.checkbox_treatment_value[y].get() == "Treatment Model":
-                    ax.plot(ts, t)
+                self.display_charts(s,e,i,r,d,v,t,ts,ax,y)
 
             y += 1
 
@@ -284,6 +251,24 @@ class App(ctk.CTk):
         canvas = FigureCanvasTkAgg(figure=fig, master=self.sidebar_frame2)
         canvas.draw()
         canvas.get_tk_widget().place(x=10, y=10)
+
+    def display_charts(self, s, e, i, r, d, v, t, ts, ax, y):
+
+        ax.plot(ts, s)
+        ax.plot(ts, i)
+
+        # will need to add isolated
+
+        if self.checkbox_values[y].get() == "SIR" or self.checkbox_values[y].get() == "SEIR":
+            ax.plot(ts, r)
+        if self.checkbox_values[y].get() == "SEIR":
+            ax.plot(ts, e)
+        if self.checkbox_deaths_value[y].get() == "Deaths":
+            ax.plot(ts, d)
+        if self.checkbox_vaccination_value[y].get() == "Vaccinations":
+            ax.plot(ts, v)
+        if self.checkbox_treatment_value[y].get() == "Treatment Model":
+            ax.plot(ts, t)
 
     def find_death_rate(self, y):
         if self.checkbox_deaths_value[y].get() == "Deaths":
@@ -312,7 +297,7 @@ class App(ctk.CTk):
 
     def find_removal_rate(self, y):
         if self.checkbox_quarantine_value[y].get() == "Quarantine":
-            return self.slider_value_removal_to_q[y].get()
+            return self.slider_value_removal_to_j[y].get()
         else:
             return 0
 
@@ -529,8 +514,9 @@ class App(ctk.CTk):
             self.checkbox_seasonal_forcing.grid(row=6, column=0, padx=self.button_padding, pady=self.button_padding,
                                                 columnspan=1, sticky="nsew")
 
+            # need to change the names here
             self.checkbox_quarantine_value.append(ctk.StringVar(value="No"))
-            self.checkbox_quarantine = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Quarantine",
+            self.checkbox_quarantine = ctk.CTkCheckBox(master=self.types_of_detail[i], text="Isolated",
                                                              onvalue="Quarantine", offvalue="No",
                                                              variable=self.checkbox_quarantine_value[i],
                                                              width=25, fg_color=self.secondary_colour,
@@ -573,23 +559,9 @@ class App(ctk.CTk):
         self.slider_value_length_of_treatment = []
         self.slider_value_reduced_infect_treatment = []
         self.slider_value_selected_treatment = []
-        #self.slider_value_quarantined = []
         self.slider_value_isolated = []
-        #self.slider_value_infectivity_infected = []
-        #self.slider_value_infectivity_quarantined = []
-        #self.slider_value_infectivity_isolated = []
-        #self.slider_value_infectivity_exposed_ni = []
-        #self.slider_value_quarantined_isolated_at_rate = []
-        #self.slider_value_exposed_quarantined_rate = []
-        #self.slider_value_infectives_diagnosed_rate = []
-        #self.slider_value_infectives_leave_rate = []
-        #self.slider_value_isolated_leave_rate = []
-        #self.slider_value_infectives_recover_rate = []
-        #self.slider_value_isolated_recover_rate = []
-        self.slider_value_removal_to_q = []
+        self.slider_value_removal_to_j = []
         self.slider_value_reduced_infect_quarantine = []
-
-
 
         # creates a number of selection option per chart
         i = 0
@@ -616,7 +588,7 @@ class App(ctk.CTk):
             self.number_of_sliders = 0
 
             if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SIS"
-                    or self.checkbox_values[i].get() == "SEIR" or self.checkbox_values[i].get() == "SEQIJR"):
+                    or self.checkbox_values[i].get() == "SEIR"):
 
                 # label and slider for time
                 self.create_slider(self.slider_value_time, "Time", i, 60, 60, 1000)
@@ -628,7 +600,7 @@ class App(ctk.CTk):
                 self.create_slider(self.slider_value_infected, "Number of Infected", i, 1, 1, 1000)
 
                 # label and slider for Recovered
-                if self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SEIR" or self.checkbox_values[i].get() == "SEQIJR":
+                if self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SEIR":
 
                     self.create_slider(self.slider_value_recovered, "Number of Recovered", i, 0, 0, 1000)
                 else:
@@ -695,6 +667,7 @@ class App(ctk.CTk):
                     self.slider_value_reduced_infect_treatment.append("No")
                     self.slider_value_selected_treatment.append("No")
 
+                # need to change name here
                 if self.checkbox_quarantine_value[i].get() == "Quarantine":
                     self.number_of_sliders += 1
                     self.label = ctk.CTkLabel(self.types_of_detail[i], text="Isolation Parameters",
@@ -702,13 +675,13 @@ class App(ctk.CTk):
                     self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
                                     padx=5, pady=5)
 
-                    self.create_slider(self.slider_value_removal_to_q, "Rate of Removal to quarantine", i, 0.05, 0, 1)
+                    self.create_slider(self.slider_value_removal_to_j, "Rate of Removal to quarantine", i, 0.05, 0, 1)
                     self.create_slider(self.slider_value_reduced_infect_quarantine, "Reduced Infectivity from Quarantine",
                                        i, 0.5, 0, 1)
                     self.create_slider(self.slider_value_isolated, "Number isolated",
                                        i, 0.5, 0, 1)
                 else:
-                    self.slider_value_removal_to_q.append("No")
+                    self.slider_value_removal_to_j.append("No")
                     self.slider_value_reduced_infect_quarantine.append("No")
                     self.slider_value_isolated.append("No")
 
