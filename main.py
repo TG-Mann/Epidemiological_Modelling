@@ -63,6 +63,8 @@ class App(ctk.CTk):
         self.slider_value_removal_to_j = []
         self.slider_value_reduced_infect_isolation = []
 
+        self.simulate_menu_present = False
+
         # removes titlebar
         self.overrideredirect(True)
 
@@ -81,7 +83,7 @@ class App(ctk.CTk):
 
         # create Main frame
         self.sidebar_frame2 = ctk.CTkFrame(self, width=1000, corner_radius=10, fg_color=self.background_colour)
-        self.sidebar_frame2.grid(row=0, column=2, rowspan=4, columnspan=10, sticky="nsew", padx=10, pady=20)
+        self.sidebar_frame2.grid(row=0, column=3, rowspan=4, columnspan=10, sticky="nsew", padx=10, pady=20)
         self.sidebar_frame2.grid_rowconfigure(4, weight=1)
 
         # buttons for main sidebar frame
@@ -262,7 +264,11 @@ class App(ctk.CTk):
         canvas.draw()
         canvas.get_tk_widget().place(x=10, y=10)
 
+    # this is the one to edit when line menu complete
     def display_charts(self, s, e, i, r, d, v, t, j, ts, ax, y):
+
+        if not self.simulate_menu_present:
+            self.simulate_menu()
 
         ax.plot(ts, s)
         ax.plot(ts, i)
@@ -365,6 +371,7 @@ class App(ctk.CTk):
 
     def model_menu(self):
 
+        self.simulate_menu_present = False
         self.sidebar_button_2.configure(border_color=self.secondary_colour, state="normal")
         self.sidebar_button_3.configure(border_color=self.un_active_colour, state="disabled")
         self.sidebar_button_4.configure(border_color=self.un_active_colour, state="disabled")
@@ -435,6 +442,7 @@ class App(ctk.CTk):
 
     def detail_menu(self):
 
+        self.simulate_menu_present = False
         self.remove_model_menu()
         self.menu_present = True
 
@@ -689,6 +697,124 @@ class App(ctk.CTk):
 
             i += 1
 
+    def simulate_menu(self):
+
+        self.types_of_line = []
+
+        self.simulate_menu_present = True
+        self.sidebar_frame2.configure(width= 850)
+        self.sidebar_frame4 = ctk.CTkScrollableFrame(self, width=125, corner_radius=10, fg_color=self.background_colour)
+        self.sidebar_frame4.grid(row=0, column=100, rowspan=4, columnspan=1, sticky="ns", padx=10, pady=20)
+        self.sidebar_frame4.grid_rowconfigure((1, 2, 3, 4), weight=0)
+
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame4, text="Lines",
+                                       font=ctk.CTkFont(self.font, size=30, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
+
+        i = 0
+        while i < self.number_of_charts():
+            print(self.number_of_charts())
+
+            if self.number_of_charts() == 4 or self.number_of_charts() == 3:
+                self.types_of_line.append(ctk.CTkFrame(master=self.sidebar_frame4))
+                self.types_of_line[i].grid(row=i + 1, column=0, padx=0, pady=5, sticky="w")
+            else:
+                self.types_of_line.append(ctk.CTkFrame(master=self.sidebar_frame4))
+                self.types_of_line[i].grid(row=i + 1, column=0, padx=0, pady=5, sticky="w")
+
+            if len(self.checkbox_values) != 0:
+                self.logo_label = ctk.CTkLabel(self.types_of_line[i], text=str(i + 1) + ": ("
+                                                                             + str(self.checkbox_values[i].get()) + ")",
+                                               font=ctk.CTkFont(self.font, size=20, weight="bold"))
+                self.logo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+            else:
+                self.logo_label = ctk.CTkLabel(self.types_of_line[i], text="Model " + str(i + 1),
+                                               font=ctk.CTkFont(self.font, size=20, weight="bold"))
+                self.logo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+
+            self.number_of_sliders = 1
+
+            if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SIS"
+                    or self.checkbox_values[i].get() == "SEIR"):
+
+                print("SIR")
+
+                # label and slider for susceptible
+
+                self.checkbox_s = ctk.CTkCheckBox(self.types_of_line[i], text= "Susceptible", fg_color=self.secondary_colour,
+                                                  command=self.checkbox_event, font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                self.checkbox_s.select()
+                self.checkbox_s.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+                self.number_of_sliders += 1
+
+                self.checkbox_i = ctk.CTkCheckBox(self.types_of_line[i], text="Infected", fg_color=self.secondary_colour,
+                                                  font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                self.checkbox_i.select()
+                self.checkbox_i.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+                self.number_of_sliders += 1
+
+                if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SEIR"):
+
+                    self.checkbox_r = ctk.CTkCheckBox(self.types_of_line[i], text="Recovered", fg_color=self.secondary_colour,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.checkbox_r.select()
+                    self.checkbox_r.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                         sticky="nsew")
+                    self.number_of_sliders += 1
+
+                if (self.checkbox_values[i].get() == "SEIR"):
+
+                    self.checkbox_e = ctk.CTkCheckBox(self.types_of_line[i], text="Exposed", fg_color=self.secondary_colour,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.checkbox_e.select()
+                    self.checkbox_e.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                         sticky="nsew")
+                    self.number_of_sliders += 1
+
+                if (self.checkbox_deaths_value[i].get() == "Deaths"):
+
+                    self.checkbox_d = ctk.CTkCheckBox(self.types_of_line[i], text="Deaths",
+                                                      fg_color=self.secondary_colour,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.checkbox_d.select()
+                    self.checkbox_d.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                         sticky="nsew")
+                    self.number_of_sliders += 1
+
+                if (self.checkbox_vaccination_value[i].get() == "Vaccinations"):
+
+                    self.checkbox_v = ctk.CTkCheckBox(self.types_of_line[i], text="Vaccinated",
+                                                      fg_color=self.secondary_colour,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.checkbox_v.select()
+                    self.checkbox_v.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                         sticky="nsew")
+                    self.number_of_sliders += 1
+
+                if (self.checkbox_treatment_value[i].get() == "Treatment Model"):
+
+                    self.checkbox_t = ctk.CTkCheckBox(self.types_of_line[i], text="Treated",
+                                                      fg_color=self.secondary_colour,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.checkbox_t.select()
+                    self.checkbox_t.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                         sticky="nsew")
+                    self.number_of_sliders += 1
+
+                if (self.checkbox_isolation_value[i].get() == "Isolated"):
+
+                    self.checkbox_j = ctk.CTkCheckBox(self.types_of_line[i], text="Isolated",
+                                                      fg_color=self.secondary_colour,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
+                    self.checkbox_j.select()
+                    self.checkbox_j.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                                         sticky="nsew")
+                    self.number_of_sliders += 1
+
+            i += 1
+
+    def checkbox_event(self):
+        print(self.checkbox_s.get())
     def resimulate(self, num):
 
         if self.charts_displayed != []:
