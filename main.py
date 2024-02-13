@@ -144,6 +144,8 @@ class App(ctk.CTk):
         self.segmented_button.grid(row=1, column=0, padx=5, pady=5, columnspan=1)
         self.segmented_button.set("One")
 
+        self.charts_displayed = []
+
     def set_parameters_menu(self):
 
         self.types_of_detail = []
@@ -209,6 +211,7 @@ class App(ctk.CTk):
                                                         "Reduced interaction q": reduced_infect_q,
                                                         "removal rate q": removal_rate_q, "isolated": num_of_j})
 
+                self.charts_displayed = [s, "", i, "", d, v, t, j, ts, ax, y]
                 self.display_charts(s, "", i, "", d, v, t, j, ts, ax, y)
 
             if x.get() == "SIR":
@@ -226,6 +229,7 @@ class App(ctk.CTk):
                                                            "Reduced interaction q": reduced_infect_q,
                                                            "removal rate q": removal_rate_q, "isolated": num_of_j})
 
+                self.charts_displayed = [s, "", i, r, d, v, t, j, ts, ax, y]
                 self.display_charts(s, "", i, r, d, v, t, j, ts, ax, y)
 
             if x.get() == "SEIR":
@@ -248,6 +252,7 @@ class App(ctk.CTk):
                                                               "Reduced interaction q": reduced_infect_q,
                                                               "removal rate q": removal_rate_q})
 
+                self.charts_displayed = [s, e, i, r, d, v, t, j, ts, ax, y]
                 self.display_charts(s, e, i, r, d, v, t, j, ts, ax, y)
 
             y += 1
@@ -261,6 +266,7 @@ class App(ctk.CTk):
 
         ax.plot(ts, s)
         ax.plot(ts, i)
+
 
         if self.checkbox_values[y].get() == "SIR" or self.checkbox_values[y].get() == "SEIR":
             ax.plot(ts, r)
@@ -682,6 +688,14 @@ class App(ctk.CTk):
                     self.slider_value_isolated.append("No")
 
             i += 1
+
+    def resimulate(self, num):
+
+        if self.charts_displayed != []:
+            self.setup_chart()
+
+
+
     def create_slider(self, array, text, i, start_value, bottom, top):
 
         # label and slider for parameters menu
@@ -693,7 +707,8 @@ class App(ctk.CTk):
         self.label.grid(row=0, column=0, padx=3, pady=3, columnspan=2, sticky="nsew")
         self.number_of_sliders += 1
         array.append(ctk.DoubleVar(value=start_value))
-        self.slider = ctk.CTkSlider(self.container, from_=bottom, to=top, variable=array[i])
+        self.slider = ctk.CTkSlider(self.container, from_=bottom, to=top, variable=array[i], command= self.resimulate)
+        array.append(ctk.DoubleVar(value=start_value))
         self.slider.grid(row=1, column=0, padx=5, pady=5, columnspan=2,
                                   sticky="nsew")
 
