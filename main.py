@@ -86,6 +86,16 @@ class App(ctk.CTk):
         self.sidebar_frame2.grid(row=0, column=3, rowspan=4, columnspan=10, sticky="nsew", padx=10, pady=20)
         self.sidebar_frame2.grid_rowconfigure(4, weight=1)
 
+        #for line menu
+        self.checkbox_s = []
+        self.checkbox_i = []
+        self.checkbox_r = []
+        self.checkbox_e = []
+        self.checkbox_j = []
+        self.checkbox_v = []
+        self.checkbox_t = []
+        self.checkbox_d = []
+
         # buttons for main sidebar frame
         self.sidebar_button_1 = ctk.CTkButton(self.sidebar_frame, border_color=self.secondary_colour, text="Models",
                                               font=(self.font, self.button_font_size),
@@ -270,22 +280,30 @@ class App(ctk.CTk):
         if not self.simulate_menu_present:
             self.simulate_menu()
 
-        ax.plot(ts, s)
-        ax.plot(ts, i)
+        if self.checkbox_s[y].get() == 1:
+            ax.plot(ts, s)
 
+        if self.checkbox_i[y].get() == 1:
+            ax.plot(ts, i)
 
         if self.checkbox_values[y].get() == "SIR" or self.checkbox_values[y].get() == "SEIR":
-            ax.plot(ts, r)
+            if self.checkbox_r[y].get() == 1:
+                ax.plot(ts, r)
         if self.checkbox_values[y].get() == "SEIR":
-            ax.plot(ts, e)
+            if self.checkbox_e[y].get() == 1:
+                ax.plot(ts, e)
         if self.checkbox_deaths_value[y].get() == "Deaths":
-            ax.plot(ts, d)
+            if self.checkbox_d[y].get() == 1:
+                ax.plot(ts, d)
         if self.checkbox_vaccination_value[y].get() == "Vaccinations":
-            ax.plot(ts, v)
+            if self.checkbox_v[y].get() == 1:
+                ax.plot(ts, v)
         if self.checkbox_treatment_value[y].get() == "Treatment Model":
-            ax.plot(ts, t)
+            if self.checkbox_t[y].get() == 1:
+                ax.plot(ts, t)
         if self.checkbox_isolation_value[y].get() == "Isolated":
-            ax.plot(ts, j)
+            if self.checkbox_j[y].get() == 1:
+                ax.plot(ts, j)
 
     def find_death_rate(self, y):
 
@@ -711,9 +729,17 @@ class App(ctk.CTk):
                                        font=ctk.CTkFont(self.font, size=30, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=20, columnspan=1, sticky="nsew")
 
+        self.checkbox_s = []
+        self.checkbox_e = []
+        self.checkbox_i = []
+        self.checkbox_r = []
+        self.checkbox_j = []
+        self.checkbox_v = []
+        self.checkbox_t = []
+        self.checkbox_d = []
+
         i = 0
         while i < self.number_of_charts():
-            print(self.number_of_charts())
 
             if self.number_of_charts() == 4 or self.number_of_charts() == 3:
                 self.types_of_line.append(ctk.CTkFrame(master=self.sidebar_frame4))
@@ -737,89 +763,89 @@ class App(ctk.CTk):
             if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SIS"
                     or self.checkbox_values[i].get() == "SEIR"):
 
-                print("SIR")
-
                 # label and slider for susceptible
 
-                self.checkbox_s = ctk.CTkCheckBox(self.types_of_line[i], text= "Susceptible", fg_color=self.secondary_colour,
-                                                  command=self.checkbox_event, font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                self.checkbox_s.select()
-                self.checkbox_s.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+                self.checkbox_s.append(ctk.CTkCheckBox(self.types_of_line[i], text= "Susceptible", fg_color=self.secondary_colour,
+                                                  command=self.resimulate_lines, font=ctk.CTkFont(self.font, size=14, weight="bold")))
+                self.checkbox_s[i].select()
+                self.checkbox_s[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
                 self.number_of_sliders += 1
 
-                self.checkbox_i = ctk.CTkCheckBox(self.types_of_line[i], text="Infected", fg_color=self.secondary_colour,
-                                                  font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                self.checkbox_i.select()
-                self.checkbox_i.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
+                self.checkbox_i.append(ctk.CTkCheckBox(self.types_of_line[i], text="Infected", fg_color=self.secondary_colour,
+                                                  command=self.resimulate_lines, font=ctk.CTkFont(self.font, size=14, weight="bold")))
+                self.checkbox_i[i].select()
+                self.checkbox_i[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2, sticky="nsew")
                 self.number_of_sliders += 1
 
                 if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SEIR"):
 
-                    self.checkbox_r = ctk.CTkCheckBox(self.types_of_line[i], text="Recovered", fg_color=self.secondary_colour,
-                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.checkbox_r.select()
-                    self.checkbox_r.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                    self.checkbox_r.append(ctk.CTkCheckBox(self.types_of_line[i], text="Recovered", fg_color=self.secondary_colour,
+                                                      command=self.resimulate_lines, font=ctk.CTkFont(self.font, size=14, weight="bold")))
+                    self.checkbox_r[i].select()
+                    self.checkbox_r[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
 
                 if (self.checkbox_values[i].get() == "SEIR"):
 
-                    self.checkbox_e = ctk.CTkCheckBox(self.types_of_line[i], text="Exposed", fg_color=self.secondary_colour,
-                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.checkbox_e.select()
-                    self.checkbox_e.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                    self.checkbox_e.append(ctk.CTkCheckBox(self.types_of_line[i], text="Exposed", fg_color=self.secondary_colour,
+                                                      command=self.resimulate_lines, font=ctk.CTkFont(self.font, size=14, weight="bold")))
+                    self.checkbox_e[i].select()
+                    self.checkbox_e[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
 
                 if (self.checkbox_deaths_value[i].get() == "Deaths"):
 
-                    self.checkbox_d = ctk.CTkCheckBox(self.types_of_line[i], text="Deaths",
-                                                      fg_color=self.secondary_colour,
-                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.checkbox_d.select()
-                    self.checkbox_d.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                    self.checkbox_d.append(ctk.CTkCheckBox(self.types_of_line[i], text="Deaths",
+                                                      fg_color=self.secondary_colour, command=self.resimulate_lines,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold")))
+                    self.checkbox_d[i].select()
+                    self.checkbox_d[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
 
                 if (self.checkbox_vaccination_value[i].get() == "Vaccinations"):
 
-                    self.checkbox_v = ctk.CTkCheckBox(self.types_of_line[i], text="Vaccinated",
-                                                      fg_color=self.secondary_colour,
-                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.checkbox_v.select()
-                    self.checkbox_v.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                    self.checkbox_v.append(ctk.CTkCheckBox(self.types_of_line[i], text="Vaccinated",
+                                                      fg_color=self.secondary_colour, command=self.resimulate_lines,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold")))
+                    self.checkbox_v[i].select()
+                    self.checkbox_v[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
 
                 if (self.checkbox_treatment_value[i].get() == "Treatment Model"):
 
-                    self.checkbox_t = ctk.CTkCheckBox(self.types_of_line[i], text="Treated",
-                                                      fg_color=self.secondary_colour,
-                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.checkbox_t.select()
-                    self.checkbox_t.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                    self.checkbox_t.append(ctk.CTkCheckBox(self.types_of_line[i], text="Treated",
+                                                      fg_color=self.secondary_colour, command=self.resimulate_lines,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold")))
+                    self.checkbox_t[i].select()
+                    self.checkbox_t[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
 
                 if (self.checkbox_isolation_value[i].get() == "Isolated"):
 
-                    self.checkbox_j = ctk.CTkCheckBox(self.types_of_line[i], text="Isolated",
-                                                      fg_color=self.secondary_colour,
-                                                      font=ctk.CTkFont(self.font, size=14, weight="bold"))
-                    self.checkbox_j.select()
-                    self.checkbox_j.grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
+                    self.checkbox_j.append(ctk.CTkCheckBox(self.types_of_line[i], text="Isolated",
+                                                      fg_color=self.secondary_colour, command=self.resimulate_lines,
+                                                      font=ctk.CTkFont(self.font, size=14, weight="bold")))
+                    self.checkbox_j[i].select()
+                    self.checkbox_j[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
 
             i += 1
 
-    def checkbox_event(self):
-        print(self.checkbox_s.get())
     def resimulate(self, num):
 
         if self.charts_displayed != []:
             self.setup_chart()
 
+    def resimulate_lines(self):
+
+        if self.charts_displayed != []:
+            self.setup_chart()
 
 
     def create_slider(self, array, text, i, start_value, bottom, top):
