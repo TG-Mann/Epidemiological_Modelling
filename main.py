@@ -786,6 +786,9 @@ class App(ctk.CTk):
                                          sticky="nsew")
                     self.number_of_sliders += 1
 
+                else:   # this is the bug!!!!!!!!!!!!!
+                    self.checkbox_r.append(0)
+
                 if (self.checkbox_values[i].get() == "SEIR"):
 
                     self.checkbox_e.append(ctk.CTkCheckBox(self.types_of_line[i], text="Exposed", fg_color=self.secondary_colour,
@@ -794,6 +797,9 @@ class App(ctk.CTk):
                     self.checkbox_e[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
+
+                else:   # this is the bug!!!!!!!!!!!!!
+                    self.checkbox_e.append(0)
 
                 if (self.checkbox_deaths_value[i].get() == "Deaths"):
 
@@ -804,16 +810,21 @@ class App(ctk.CTk):
                     self.checkbox_d[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
+                else:   # this is the bug!!!!!!!!!!!!!
+                    self.checkbox_d.append(0)
 
                 if (self.checkbox_vaccination_value[i].get() == "Vaccinations"):
 
                     self.checkbox_v.append(ctk.CTkCheckBox(self.types_of_line[i], text="Vaccinated",
                                                       fg_color=self.secondary_colour, command=self.resimulate_lines,
                                                       font=ctk.CTkFont(self.font, size=14, weight="bold")))
+
                     self.checkbox_v[i].select()
                     self.checkbox_v[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
+                else:   # this is the bug!!!!!!!!!!!!!
+                    self.checkbox_v.append(0)
 
                 if (self.checkbox_treatment_value[i].get() == "Treatment Model"):
 
@@ -824,6 +835,8 @@ class App(ctk.CTk):
                     self.checkbox_t[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
+                else:   # this is the bug!!!!!!!!!!!!!
+                    self.checkbox_t.append(0)
 
                 if (self.checkbox_isolation_value[i].get() == "Isolated"):
 
@@ -834,8 +847,14 @@ class App(ctk.CTk):
                     self.checkbox_j[i].grid(row=self.number_of_sliders, column=0, padx=10, pady=10, columnspan=2,
                                          sticky="nsew")
                     self.number_of_sliders += 1
+                else:   # this is the bug!!!!!!!!!!!!!
+                    self.checkbox_j.append(0)
+                    
+                print(len(self.checkbox_v))
+                print(i)
+                i += 1
 
-            i += 1
+
 
     def resimulate(self, num):
 
