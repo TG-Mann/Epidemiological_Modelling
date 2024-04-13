@@ -1026,16 +1026,16 @@ class App(ctk.CTk):
                 if self.checkbox_seasonal_forcing_value[i].get() == "Seasonal Forcing":
                     if i == 0:
                         self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", 0,
-                                       0.5, 0, 1)
+                                       0.5, -4, 4)
                     if i == 1:
                         self.create_slider(self.slider_value_seasonal_forcing_severity2, "Seasonal Forcing Severity", 1,
-                                       0.5, 0, 1)
+                                       0.5, -4, 4)
                     if i == 2:
                         self.create_slider(self.slider_value_seasonal_forcing_severity3, "Seasonal Forcing Severity", 2,
-                                       0.5, 0, 1)
+                                       0.5, -4, 4)
                     if i == 3:
                         self.create_slider(self.slider_value_seasonal_forcing_severity4, "Seasonal Forcing Severity", 3,
-                                       0.5, 0, 1)
+                                       0.5, -4, 4)
 
 
                 if self.checkbox_treatment_value[i].get() == "Treatment Model":

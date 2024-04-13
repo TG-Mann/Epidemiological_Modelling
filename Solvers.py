@@ -100,7 +100,7 @@ def sir(values, t):
 
     beta = calc_seasonal_forcing(t)
     return [-beta * values[0] * (values[1] + reduction_infect * values[5] + reduction_interaction_q * values[6]) + birth_rate * (values[0] + values[1] + values[0]) - vaccination_rate * values[0],
-            beta * values[0] * (values[1] + reduction_infect * values[5]) - (gamma + num_in_treat) * values[1] - birth_rate * values[1] - removal_rate_q * values[1],
+            beta * values[0] * (values[1] + reduction_infect * values[5]) - (gamma + num_in_treat) * values[1] - (birth_rate * values[1]) - removal_rate_q * values[1],
             (1 - death_rate) * (gamma * values[1]) - birth_rate * values[2] + gamma * values[6],
             death_rate * (gamma * values[1]),
             vaccination_rate * values[0],
@@ -112,7 +112,7 @@ def sis(values, t):
 
     beta = calc_seasonal_forcing(t)
     return [-beta * values[0] * (values[1] + reduction_infect * values[4] + reduction_interaction_q * values[5]) + (1 - death_rate) * (gamma * values[1]) + birth_rate * (values[0] + values[1] + values[0]) - vaccination_rate * values[0],
-            beta * values[0] * (values[1] + reduction_infect * values[4]) - (gamma + num_in_treat) * values[1] - birth_rate * values[1] - removal_rate_q * values[1],
+            beta * values[0] * (values[1] + reduction_infect * values[4]) - (gamma + num_in_treat) * values[1] - (birth_rate * values[1]) - removal_rate_q * values[1],
             death_rate * (gamma * values[1]),
             vaccination_rate * values[0],
             num_in_treat * values[1] - removal_rate_treat * values[4],
@@ -123,7 +123,7 @@ def seir(values, t):
 
     beta = calc_seasonal_forcing(t)
     return [-beta * values[0] * (values[2] + reduction_infect * values[6] + reduction_interaction_q * values[7]) + birth_rate * (values[0] + values[1] + values[0]) - vaccination_rate * values[0],
-            beta * values[0] * values[2] - exposure * values[1] - birth_rate * values[1],
+            beta * values[0] * values[2] - exposure * values[1] - (birth_rate * values[1]),
             exposure * values[1] - (gamma + num_in_treat) * values[2] - birth_rate * values[2] - removal_rate_q * values[2],
             (1 - death_rate) * (gamma * values[2]) - birth_rate * values[3],
             death_rate * (gamma * values[2]),
