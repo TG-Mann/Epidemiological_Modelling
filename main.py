@@ -979,27 +979,27 @@ class App(ctk.CTk):
                     # label and slider for Exposed
                     if i == 0:
                         self.create_slider(self.slider_value_exposed, "Number of Exposed", 0, 1, 1, 100)
-                        self.create_slider(self.slider_value_exposure, "Exposure Rate", 0, 50, 1, 100)
+                        self.create_slider(self.slider_value_exposure, "Exposure Rate", 0, 1, 1.8, 0.2)
                     if i == 1:
                         self.create_slider(self.slider_value_exposed2, "Number of Exposed", 1, 1, 1, 100)
-                        self.create_slider(self.slider_value_exposure2, "Exposure Rate", 1, 50, 1, 100)
+                        self.create_slider(self.slider_value_exposure2, "Exposure Rate", 1, 1, 1.8, 0.2)
                     if i == 2:
                         self.create_slider(self.slider_value_exposed3, "Number of Exposed", 2, 1, 1, 100)
-                        self.create_slider(self.slider_value_exposure3, "Exposure Rate", 2, 50, 1, 100)
+                        self.create_slider(self.slider_value_exposure3, "Exposure Rate", 2, 1, 1.8, 0.2)
                     if i == 3:
                         self.create_slider(self.slider_value_exposed4, "Number of Exposed", 3, 1, 1, 100)
-                        self.create_slider(self.slider_value_exposure4, "Exposure Rate", 3, 50, 1, 100)
+                        self.create_slider(self.slider_value_exposure4, "Exposure Rate", 3, 1, 1.8, 0.2)
 
                 if i == 0:
-                    self.create_slider(self.slider_value_transmission, "Transmission Rate (Beta)", 0, 0.0005, 0.00001, 0.001)
+                    self.create_slider(self.slider_value_transmission, "Transmission Rate (Beta)", 0, 0.0005, 0.0001, 0.001)
                 if i == 1:
-                    self.create_slider(self.slider_value_transmission2, "Transmission Rate (Beta)", 1, 0.0005, 0.00001,
+                    self.create_slider(self.slider_value_transmission2, "Transmission Rate (Beta)", 1, 0.0005, 0.0001,
                                        0.001)
                 if i == 2:
-                    self.create_slider(self.slider_value_transmission3, "Transmission Rate (Beta)", 2, 0.0005, 0.00001,
+                    self.create_slider(self.slider_value_transmission3, "Transmission Rate (Beta)", 2, 0.0005, 0.0001,
                                        0.001)
                 if i == 3:
-                    self.create_slider(self.slider_value_transmission4, "Transmission Rate (Beta)", 3, 0.0005, 0.00001,
+                    self.create_slider(self.slider_value_transmission4, "Transmission Rate (Beta)", 3, 0.0005, 0.0001,
                                        0.001)
 
                 if (self.checkbox_values[i].get() == "SIR" or self.checkbox_values[i].get() == "SIS"
@@ -1026,16 +1026,16 @@ class App(ctk.CTk):
                 if self.checkbox_vaccination_value[i].get() == "Vaccinations":
                     if i == 0:
                         self.create_slider(self.slider_value_vaccination, "Number of Vaccinations", 0,
-                                           0.001, 0.01, 0.1)
+                                           0.001, 0, 0.1)
                     if i == 1:
                         self.create_slider(self.slider_value_vaccination2, "Number of Vaccinations", 1,
-                                           0.001, 0.01, 0.1)
+                                           0.001, 0, 0.1)
                     if i == 2:
                         self.create_slider(self.slider_value_vaccination3, "Number of Vaccinations", 2,
-                                           0.001, 0.01, 0.1)
+                                           0.001, 0, 0.1)
                     if i == 3:
                         self.create_slider(self.slider_value_vaccination4, "Number of Vaccinations", 3,
-                                           0.001, 0.01, 0.1)
+                                           0.001, 0, 0.1)
 
                 if self.checkbox_deaths_value[i].get() == "Deaths":
                     if i == 0:
@@ -1051,16 +1051,16 @@ class App(ctk.CTk):
                 if self.checkbox_seasonal_forcing_value[i].get() == "Seasonal Forcing":
                     if i == 0:
                         self.create_slider(self.slider_value_seasonal_forcing_severity, "Seasonal Forcing Severity", 0,
-                                       0.5, -4, 4)
+                                       0.5, -1.5, 1.5)
                     if i == 1:
                         self.create_slider(self.slider_value_seasonal_forcing_severity2, "Seasonal Forcing Severity", 1,
-                                       0.5, -4, 4)
+                                       0.5, -1.5, 1.5)
                     if i == 2:
                         self.create_slider(self.slider_value_seasonal_forcing_severity3, "Seasonal Forcing Severity", 2,
-                                       0.5, -4, 4)
+                                       0.5, -1.5, 1.5)
                     if i == 3:
                         self.create_slider(self.slider_value_seasonal_forcing_severity4, "Seasonal Forcing Severity", 3,
-                                       0.5, -4, 4)
+                                       0.5, -1.5, 1.5)
 
 
                 if self.checkbox_treatment_value[i].get() == "Treatment Model":
