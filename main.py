@@ -143,6 +143,11 @@ class App(ctk.CTk):
         self.slider_value_reduced_infect_isolation3 = []
         self.slider_value_reduced_infect_isolation4 = []
 
+        self.slider_value_removal_from_j = []
+        self.slider_value_removal_from_j2 = []
+        self.slider_value_removal_from_j3 = []
+        self.slider_value_removal_from_j4 = []
+
         self.simulate_menu_present = False
 
         # removes titlebar
@@ -332,6 +337,11 @@ class App(ctk.CTk):
         self.slider_value_reduced_infect_isolation3 = []
         self.slider_value_reduced_infect_isolation4 = []
 
+        self.slider_value_removal_from_j = []
+        self.slider_value_removal_from_j2 = []
+        self.slider_value_removal_from_j3 = []
+        self.slider_value_removal_from_j4 = []
+
     def set_buttons(self, value):
         self.sidebar_button_2.configure(border_color=self.un_active_colour, state="disabled")
         self.sidebar_button_3.configure(border_color=self.un_active_colour, state="disabled")
@@ -363,6 +373,7 @@ class App(ctk.CTk):
             seasonal_forcing = self.find_amplitude(y)
             reduced_infect_q = self.find_reduced_rate(y)
             removal_rate_q = self.find_removal_rate(y)
+            removal_rate_from_q = self.find_removal_from_j(y)
 
             if x.get() == "SIS":
                 s, i, d, v, t, j, ts = solver(x.get(), {"susceptible": num_of_s, "infected": num_of_i,
@@ -373,7 +384,8 @@ class App(ctk.CTk):
                                                         "removal from treatment": rem_of_treat,
                                                         "seasonal forcing": seasonal_forcing,
                                                         "Reduced interaction q": reduced_infect_q,
-                                                        "removal rate q": removal_rate_q, "isolated": num_of_j})
+                                                        "removal rate q": removal_rate_q, "isolated": num_of_j,
+                                                        "removal from q": removal_rate_from_q})
 
                 self.charts_displayed = [s, "", i, "", d, v, t, j, ts, ax, y]
                 self.display_charts(s, "", i, "", d, v, t, j, ts, ax, y)
@@ -390,7 +402,8 @@ class App(ctk.CTk):
                                                            "removal from treatment": rem_of_treat,
                                                            "seasonal forcing": seasonal_forcing,
                                                            "Reduced interaction q": reduced_infect_q,
-                                                           "removal rate q": removal_rate_q, "isolated": num_of_j})
+                                                           "removal rate q": removal_rate_q, "isolated": num_of_j,
+                                                           "removal from q": removal_rate_from_q})
 
                 self.charts_displayed = [s, "", i, r, d, v, t, j, ts, ax, y]
                 self.display_charts(s, "", i, r, d, v, t, j, ts, ax, y)
@@ -412,7 +425,8 @@ class App(ctk.CTk):
                                                               "seasonal forcing": seasonal_forcing,
                                                               "isolated": num_of_j,
                                                               "Reduced interaction q": reduced_infect_q,
-                                                              "removal rate q": removal_rate_q})
+                                                              "removal rate q": removal_rate_q,
+                                                              "removal from q": removal_rate_from_q})
 
                 self.charts_displayed = [s, e, i, r, d, v, t, j, ts, ax, y]
                 self.display_charts(s, e, i, r, d, v, t, j, ts, ax, y)
@@ -603,7 +617,18 @@ class App(ctk.CTk):
                 return self.slider_value_removal_to_j4[0].get()
         else:
             return 0
-
+    def find_removal_from_j(self, y):
+        if self.checkbox_isolation_value[y].get() == "Isolated":
+            if y == 0:
+                return self.slider_value_removal_from_j[0].get()
+            if y == 1:
+                return self.slider_value_removal_from_j2[0].get()
+            if y == 2:
+                return self.slider_value_removal_from_j3[0].get()
+            if y == 3:
+                return self.slider_value_removal_from_j4[0].get()
+        else:
+            return 0
     def find_reduced_rate(self, y):
 
         if self.checkbox_isolation_value[y].get() == "Isolated":
@@ -1102,12 +1127,14 @@ class App(ctk.CTk):
                         self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
                                         padx=5, pady=5)
 
-                        self.create_slider(self.slider_value_removal_to_j, "Rate of Removal to quarantine", 0, 0.05, 0, 1)
+                        self.create_slider(self.slider_value_removal_to_j, "Rate of Removal to Isolation", 0, 0.25, 0, 0.5)
                         self.create_slider(self.slider_value_reduced_infect_isolation,
                                            "Reduced Infectivity from Quarantine",
-                                           0, 0.5, 0, 1)
+                                           0, 1, 0, 10)
                         self.create_slider(self.slider_value_isolated, "Number isolated",
                                            0, 0, 0, 100)
+                        self.create_slider(self.slider_value_removal_from_j, "Rate of Removal from Isolation", 0, 0.5,
+                                           0, 1)
 
                     if i == 1:
                         self.number_of_sliders += 1
@@ -1116,12 +1143,14 @@ class App(ctk.CTk):
                         self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
                                         padx=5, pady=5)
 
-                        self.create_slider(self.slider_value_removal_to_j2, "Rate of Removal to quarantine", 1, 0.05, 0, 1)
+                        self.create_slider(self.slider_value_removal_to_j2, "Rate of Removal to Isolation", 1, 0.25, 0, 0.5)
                         self.create_slider(self.slider_value_reduced_infect_isolation2,
-                                           "Reduced Infectivity from Quarantine",
-                                           1, 0.5, 0, 1)
+                                           "Reduced Infectivity from Isolation",
+                                           1, 1, 0, 10)
                         self.create_slider(self.slider_value_isolated2, "Number isolated",
                                            1, 0, 0, 100)
+                        self.create_slider(self.slider_value_removal_from_j2, "Rate of Removal from Isolation", 1, 0.5,
+                                           0, 1)
 
                     if i == 2:
                         self.number_of_sliders += 1
@@ -1130,12 +1159,13 @@ class App(ctk.CTk):
                         self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
                                         padx=5, pady=5)
 
-                        self.create_slider(self.slider_value_removal_to_j3, "Rate of Removal to quarantine", 2, 0.05, 0, 1)
+                        self.create_slider(self.slider_value_removal_to_j3, "Rate of Removal to Isolation", 2, 0.25, 0, 0.5)
                         self.create_slider(self.slider_value_reduced_infect_isolation3,
-                                           "Reduced Infectivity from Quarantine",
-                                           2, 0.5, 0, 1)
+                                           "Reduced Infectivity from Isolation",
+                                           2, 1, 0, 10)
                         self.create_slider(self.slider_value_isolated3, "Number isolated",
                                            2, 0, 0, 100)
+                        self.create_slider(self.slider_value_removal_from_j3, "Rate of Removal from Isolation", 2, 0.5, 0, 1)
                     if i == 3:
                         self.number_of_sliders += 1
                         self.label = ctk.CTkLabel(self.types_of_detail[i], text="Isolation Parameters",
@@ -1143,12 +1173,13 @@ class App(ctk.CTk):
                         self.label.grid(row=self.number_of_sliders, column=0, rowspan=1, columnspan=2, sticky="nsew",
                                         padx=5, pady=5)
 
-                        self.create_slider(self.slider_value_removal_to_j4, "Rate of Removal to quarantine", 3, 0.05, 0, 1)
+                        self.create_slider(self.slider_value_removal_to_j4, "Rate of Removal to Isolation", 3, 0.25, 0, 0.5)
                         self.create_slider(self.slider_value_reduced_infect_isolation4,
-                                           "Reduced Infectivity from Quarantine",
-                                           3, 0.5, 0, 1)
+                                           "Reduced Infectivity from Isolation",
+                                           3, 1, 0, 10)
                         self.create_slider(self.slider_value_isolated4, "Number isolated",
                                            3, 0, 0, 100)
+                        self.create_slider(self.slider_value_removal_from_j4, "Rate of Removal from Isolation", 3, 0.5, 0, 1)
 
             i += 1
 

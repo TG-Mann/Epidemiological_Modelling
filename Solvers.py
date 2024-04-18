@@ -101,36 +101,36 @@ def sir(values, t):
     beta = calc_seasonal_forcing(t)
 
     return [-beta * values[0] * (values[1] + reduction_infect * values[5] + reduction_interaction_q * values[6]) + birth_rate * (values[0] + values[1] + values[2] + values[3] + values[4] + values[5] + values[6]) - vaccination_rate * values[0],
-            beta * values[0] * (values[1] + reduction_infect * values[5]) - (gamma + num_in_treat) * values[1] - removal_rate_q * values[1],
-            (1 - death_rate) * (gamma * values[1]) + gamma * values[6],
+            beta * values[0] * (values[1] + reduction_infect * values[5] + reduction_interaction_q * values[6]) - (gamma + num_in_treat) * values[1] - removal_rate_q * values[1],
+            (1 - death_rate) * (gamma * values[1]) + gamma * values[6] + removal_rate_treat * values[5] + removal_from_q * values[6],
             death_rate * (gamma * values[1]) ,
             vaccination_rate * values[0] ,
             num_in_treat * values[1] - removal_rate_treat * values[5] ,
-            removal_rate_q * values[1] - gamma * values[6]]
+            removal_rate_q * values[1] - removal_from_q * values[6]]
 
 
 def sis(values, t):
 
     beta = calc_seasonal_forcing(t)
-    return [-beta * values[0] * (values[1] + reduction_infect * values[4] + reduction_interaction_q * values[5]) + (1 - death_rate) * (gamma * values[1]) + birth_rate * (values[0] + values[1] + values[2] + values[3] + values[4] + values[5]) - vaccination_rate * values[0],
-            beta * values[0] * (values[1] + reduction_infect * values[4]) - (gamma + num_in_treat) * values[1] - removal_rate_q * values[1],
+    return [-beta * values[0] * (values[1] + reduction_infect * values[4] + reduction_interaction_q * values[5]) + (1 - death_rate) * (gamma * values[1]) + birth_rate * (values[0] + values[1] + values[2] + values[3] + values[4] + values[5]) + (removal_from_q * values[5]) + (removal_rate_treat * values[4])- vaccination_rate * values[0],
+            beta * values[0] * (values[1] + reduction_infect * values[4] + reduction_interaction_q * values[5]) - (gamma + num_in_treat) * values[1] - removal_rate_q * values[1],
             death_rate * (gamma * values[1]),
             vaccination_rate * values[0],
             num_in_treat * values[1] - removal_rate_treat * values[4],
-            removal_rate_q * values[1]]
+            removal_rate_q * values[1] - removal_from_q * values[5]]
 
 
 def seir(values, t):
 
     beta = calc_seasonal_forcing(t)
     return [-beta * values[0] * (values[2] + reduction_infect * values[6] + reduction_interaction_q * values[7]) + birth_rate * (values[0] + values[1] + values[2] + values[3] + values[4] + values[5] + values[6] + values[7]) - vaccination_rate * values[0],
-            beta * values[0] * values[2] - exposure * values[1],
+            beta * values[0] * (values[2] + reduction_infect * values[6] + reduction_interaction_q * values[7]) - exposure * values[1],
             exposure * values[1] - (gamma + num_in_treat) * values[2] - removal_rate_q * values[2],
-            (1 - death_rate) * (gamma * values[2]),
+            (1 - death_rate) * (gamma * values[2]) + removal_rate_treat * values[6] + removal_from_q * values[7],
             death_rate * (gamma * values[2]),
             vaccination_rate * values[0],
-            num_in_treat * values[1] - removal_rate_treat * values[6],
-            removal_rate_q * values[2]]
+            num_in_treat * values[2] - removal_rate_treat * values[6],
+            removal_rate_q * values[2] - removal_from_q * values[7]]
 
 
 def solver(chart_type, parameters):
@@ -149,11 +149,13 @@ def solver(chart_type, parameters):
     global seasonal_forcing
     global removal_rate_q
     global reduction_interaction_q
+    global removal_from_q
 
     # either 0 if not selected or slider value if selected
     birth_rate = parameters["births"]
     death_rate = parameters["deaths_from_disease"]
     vaccination_rate = parameters["vaccinated"]
+    removal_from_q = parameters["removal from q"]
     d = 0
     v = 0
     t = 0
