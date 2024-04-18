@@ -990,13 +990,13 @@ class App(ctk.CTk):
 
                 if self.checkbox_birthrates_value[i].get() == "Birth Rates":
                     if i == 0:
-                        self.create_slider(self.slider_value_birthrates, "Birth / Death rate", 0, 0.05, 0, 0.1)
+                        self.create_slider(self.slider_value_birthrates, "Birth Rate", 0, 0, 0, 0.008)
                     if i == 1:
-                        self.create_slider(self.slider_value_birthrates2, "Birth / Death rate", 1, 0.05, 0, 0.1)
+                        self.create_slider(self.slider_value_birthrates2, "Birth Rate", 1,  0, 0, 0.008)
                     if i == 2:
-                        self.create_slider(self.slider_value_birthrates3, "Birth / Death rate", 2, 0.05, 0, 0.1)
+                        self.create_slider(self.slider_value_birthrates3, "Birth Rate", 2,  0, 0, 0.008)
                     if i == 3:
-                        self.create_slider(self.slider_value_birthrates4, "Birth / Death rate", 2, 0.05, 0, 0.1)
+                        self.create_slider(self.slider_value_birthrates4, "Birth Rate", 2,  0, 0, 0.008)
 
                 if self.checkbox_vaccination_value[i].get() == "Vaccinations":
                     if i == 0:
