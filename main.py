@@ -151,7 +151,7 @@ class App(ctk.CTk):
         self.simulate_menu_present = False
 
         # removes titlebar
-        self.overrideredirect(True)
+        self.overrideredirect(False)
 
         # configure grid layout (4x4)
         self.grid_columnconfigure((1, 2, 3, 4, 5, 6, 7, 8, 9, 10), weight=1)
