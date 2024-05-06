@@ -38,7 +38,7 @@ class App(ctk.CTk):
         self.infected_colour = ['#994C00', '#FF8000', '#FFB266', '#FFE5CC']
         self.recovered_colour = ['#009999', '#00FFFF', '#66FFFF', '#CCFFFF']
         self.exposed_colour = ['#99004C', '#FF007F', '#FF66B2', '#FFCCE5']
-        self.death_colour = ['#990000', '#FF0000', '#FF6666', '#FFCCC']
+        self.death_colour = ['#990000', '#FF0000', '#FF6666', '#FFCCCC']
         self.treatment_colour = ['#000099', '#0000FF', '#6666FF', '#CCCCFF']
         self.vaccinated_colour = ['#999900', '#FFFF00', '#FFFF66', '#FFFFCC']
         self.isolated_colour = ['#F5BDA1', '#EE8D5C', '#CC5316', '#983D10']
